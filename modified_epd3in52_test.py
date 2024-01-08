@@ -46,7 +46,7 @@ try:
     draw.arc((140, 50, 190, 100), 0, 360, fill = 0)
     draw.rectangle((80, 50, 130, 100), fill = 0)
     draw.chord((200, 50, 250, 100), 0, 360, fill = 0)
-    epd.display(epd.getbuffer(Himage.transpose(Image.FLIP_TOP_BOTTOM)))
+    epd.display(epd.getbuffer(Himage.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)))
     epd.lut_GC()
     epd.refresh()
     time.sleep(2)
