@@ -8,6 +8,7 @@ if os.path.exists(libdir):
     sys.path.append(libdir)
 
 import logging
+from assets.s_and_p_500 import S_And_P_500
 from waveshare_epd import epd3in52
 import time
 from PIL import Image,ImageDraw,ImageFont
@@ -26,26 +27,19 @@ try:
 
     epd.send_command(0x50)
     epd.send_data(0x17)
-    time.sleep(2)
     
     # font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
     # font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
     # font30 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 40)
     
     # Drawing on the Horizontal image
+    asset_to_show = S_And_P_500()
     logging.info("1.Drawing on the Horizontal image...")
     Himage = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(Himage)
-    draw.text((10, 0), 'hello world', fill = 0)
-    draw.text((10, 20), '3.52inch e-Paper', fill = 0)
-    draw.line((20, 50, 70, 100), fill = 0)
-    draw.line((70, 50, 20, 100), fill = 0)
-    draw.rectangle((20, 50, 70, 100), outline = 0)
-    draw.line((165, 50, 165, 100), fill = 0)
-    draw.line((140, 75, 190, 75), fill = 0)
-    draw.arc((140, 50, 190, 100), 0, 360, fill = 0)
-    draw.rectangle((80, 50, 130, 100), fill = 0)
-    draw.chord((200, 50, 250, 100), 0, 360, fill = 0)
+    font = ImageFont.truetype("font.ttf", size=60)
+    draw.text((10, 0), asset_to_show.name, font=font, fill = 0)
+    draw.text((epd.height//2, 0), asset_to_show.price, font=font, fill = 0)
     epd.display(epd.getbuffer(Himage.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)))
     epd.lut_GC()
     epd.refresh()
