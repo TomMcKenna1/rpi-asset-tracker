@@ -28,17 +28,16 @@ try:
     epd.send_data(0x17)
     time.sleep(2)
     
-    font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
-    font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
-    font30 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 40)
+    # font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
+    # font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
+    # font30 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 40)
     
     # Drawing on the Horizontal image
     logging.info("1.Drawing on the Horizontal image...")
     Himage = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(Himage)
-    draw.text((10, 0), 'hello world', font = font24, fill = 0)
-    draw.text((10, 20), '3.52inch e-Paper', font = font24, fill = 0)
-    draw.text((150, 0), u'微雪电子', font = font24, fill = 0)    
+    draw.text((10, 0), 'hello world', fill = 0)
+    draw.text((10, 20), '3.52inch e-Paper', fill = 0)
     draw.line((20, 50, 70, 100), fill = 0)
     draw.line((70, 50, 20, 100), fill = 0)
     draw.rectangle((20, 50, 70, 100), outline = 0)
@@ -47,7 +46,7 @@ try:
     draw.arc((140, 50, 190, 100), 0, 360, fill = 0)
     draw.rectangle((80, 50, 130, 100), fill = 0)
     draw.chord((200, 50, 250, 100), 0, 360, fill = 0)
-    epd.display(epd.getbuffer(Himage))
+    epd.display(epd.getbuffer(Himage.transpose(Image.FLIP_TOP_BOTTOM)))
     epd.lut_GC()
     epd.refresh()
     time.sleep(2)
