@@ -42,8 +42,9 @@ class ImageDrawer:
             font=self.font30,
             fill=0,
         )
+        price_start = max(30 + name_text_length, self.width // 2 - last_close_text_length // 2)
         draw.text(
-            (self.width // 2 - last_close_text_length // 2, meta_start_height),
+            (price_start, meta_start_height),
             self.asset_last_close,
             font=self.font30,
             fill=0,
