@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 
-from .assets import Asset
+from asset import Asset
 
 
 class ImageDrawer:

@@ -1,11 +1,16 @@
+import argparse
 import logging
 
 from waveshare_epd import epd3in52
 
 from asset_tracker import ImageDrawer
-from asset_tracker.assets import GSPC, BTC
+from asset_tracker import Asset
 
 logging.basicConfig(level=logging.DEBUG)
+
+parser = argparse.ArgumentParser("main.py")
+parser.add_argument("ticker_symbol", help="The ticker symbol of the asset being tracked.", type=int)
+args = parser.parse_args()
 
 logging.info("Initialising display...")
 epd = epd3in52.EPD()
@@ -19,7 +24,7 @@ epd.send_data(0x17)
 logging.info("Display initialised.")
 
 logging.info("Gathering latest data...")
-asset = BTC()
+asset = Asset(args.ticker_symbol)
 logging.info("Data gathered.")
 logging.info("Drawing image...")
 image_drawer = ImageDrawer(360, 240, asset)

@@ -1,11 +1,11 @@
-from .base import Asset
 import yfinance as yf
 
 
-class GSPC(Asset):
-    def __init__(self):
-        self.yf_ticker = yf.Ticker("^GSPC")
-        self._name = "S&P 500"
+class Asset:
+
+    def __init__(self, symbol):
+        self.yf_ticker = yf.Ticker(symbol)
+        self._name = symbol
         self._price = self.get_latest_price()
 
     @property
