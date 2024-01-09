@@ -8,7 +8,7 @@ if os.path.exists(libdir):
     sys.path.append(libdir)
 
 import logging
-from waveshare_epd import epd3in52
+# from waveshare_epd import epd3in52
 import time
 from PIL import Image,ImageDraw,ImageFont
 
@@ -17,16 +17,16 @@ logging.basicConfig(level=logging.DEBUG)
 try:
     logging.info("epd3in52 Demo")
     
-    epd = epd3in52.EPD()
-    logging.info("init and Clear")
-    epd.init()
-    epd.display_NUM(epd.WHITE)
-    epd.lut_GC()
-    epd.refresh()
+    # epd = epd3in52.EPD()
+    # logging.info("init and Clear")
+    # epd.init()
+    # epd.display_NUM(epd.WHITE)
+    # epd.lut_GC()
+    # epd.refresh()
 
-    epd.send_command(0x50)
-    epd.send_data(0x17)
-    time.sleep(2)
+    # epd.send_command(0x50)
+    # epd.send_data(0x17)
+    # time.sleep(2)
     
     # font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
     # font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
@@ -34,7 +34,7 @@ try:
     
     # Drawing on the Horizontal image
     logging.info("1.Drawing on the Horizontal image...")
-    Himage = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
+    Himage = Image.new('1', (360, 240), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(Himage)
     draw.text((10, 0), 'hello world', fill = 0)
     draw.text((10, 20), '3.52inch e-Paper', fill = 0)
@@ -46,9 +46,10 @@ try:
     draw.arc((140, 50, 190, 100), 0, 360, fill = 0)
     draw.rectangle((80, 50, 130, 100), fill = 0)
     draw.chord((200, 50, 250, 100), 0, 360, fill = 0)
-    epd.display(epd.getbuffer(Himage.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)))
-    epd.lut_GC()
-    epd.refresh()
+    # epd.display(epd.getbuffer(Himage.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)))
+    # epd.lut_GC()
+    # epd.refresh()
+    Himage.show()
     time.sleep(2)
     
     # logging.info("3.read bmp file")
@@ -83,15 +84,15 @@ try:
 
 
     logging.info("Clear...")
-    epd.Clear()
+    # epd.Clear()
     
     logging.info("Goto Sleep...")
-    epd.sleep()
+    # epd.sleep()
     
 except IOError as e:
     logging.info(e)
     
 except KeyboardInterrupt:    
     logging.info("ctrl + c:")
-    epd3in52.epdconfig.module_exit(cleanup=True)
+    # epd3in52.epdconfig.module_exit(cleanup=True)
     exit()
