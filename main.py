@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 parser = argparse.ArgumentParser("main.py")
 parser.add_argument(
-    "ticker_symbol", help="The ticker symbol of the asset being tracked.", type=int
+    "ticker_symbol", help="The ticker symbol of the asset being tracked.", type=str
 )
 args = parser.parse_args()
 
