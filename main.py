@@ -9,7 +9,9 @@ from asset_tracker import Asset
 logging.basicConfig(level=logging.DEBUG)
 
 parser = argparse.ArgumentParser("main.py")
-parser.add_argument("ticker_symbol", help="The ticker symbol of the asset being tracked.", type=int)
+parser.add_argument(
+    "ticker_symbol", help="The ticker symbol of the asset being tracked.", type=int
+)
 args = parser.parse_args()
 
 logging.info("Initialising display...")

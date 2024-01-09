@@ -2,7 +2,6 @@ import yfinance as yf
 
 
 class Asset:
-
     def __init__(self, symbol):
         self.yf_ticker = yf.Ticker(symbol)
         self._name = symbol
