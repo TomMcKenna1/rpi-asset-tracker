@@ -16,48 +16,61 @@ class ImageDrawer:
         self.asset_change = str(round(asset.change, 2))+"%"
         self.font30 = ImageFont.truetype(font, size=font_size)
         self.font30.set_variation_by_name("ExtraBold")
-
-    def draw_asset_metadata(self, draw, bar_thickness: int = 1):
         ascent, descent = self.font30.getmetrics()
-        text_height = ascent + descent
-        meta_start_height = self.height - text_height
-        name_text_length = self.font30.getlength(self.asset_name)
-        last_close_text_length = self.font30.getlength(self.asset_last_close)
-        change_text_length = self.font30.getlength(self.asset_change)
+        self.meta_font_height = ascent + descent
+        self.bar_thickness = 1
+        self.meta_start_height = self.height - self.meta_font_height
+
+    def _draw_meta_divider(self, draw):
         metadata_divider = [
-            (0, meta_start_height - bar_thickness),
-            (self.width, meta_start_height),
+            (0, self.meta_start_height - self.bar_thickness),
+            (self.width, self.meta_start_height),
         ]
+        draw.rectangle(metadata_divider, fill=0)
+
+    def _draw_meta_name(self, draw):
+        name_text_length = self.font30.getlength(self.asset_name)
         name_divider = [
-            (20 + name_text_length, meta_start_height + text_height // 5),
-            (20 + name_text_length + bar_thickness, self.height - text_height // 5),
-        ]
-        change_divider = [
-            (self.width - change_text_length - 20, meta_start_height + text_height // 5),
-            (self.width - change_text_length - 20 + bar_thickness, self.height - text_height // 5),
+            (20 + name_text_length, self.meta_start_height + self.meta_font_height // 5),
+            (20 + name_text_length + self.bar_thickness, self.height - self.meta_font_height // 5),
         ]
         draw.text(
-            (10, meta_start_height),
+            (10, self.meta_start_height),
             self.asset_name,
             font=self.font30,
             fill=0,
         )
-        price_start = max(30 + name_text_length, self.width // 2 - last_close_text_length // 2)
+        draw.rectangle(name_divider, fill=0)
+    
+    def _draw_meta_price(self, draw):
+        last_close_text_length = self.font30.getlength(self.asset_last_close)
         draw.text(
-            (price_start, meta_start_height),
+            (self.width // 2 - last_close_text_length // 2, self.meta_start_height),
             self.asset_last_close,
             font=self.font30,
             fill=0,
         )
+    
+    def _draw_meta_change(self, draw):
+        change_text_length = self.font30.getlength(self.asset_change)
+        change_divider = [
+            (self.width - change_text_length - 20, self.meta_start_height + self.meta_font_height // 5),
+            (self.width - change_text_length - 20 + self.bar_thickness, self.height - self.meta_font_height // 5),
+        ]
+        
         draw.text(
-            (self.width - change_text_length - 10, meta_start_height),
+            (self.width - change_text_length - 10, self.meta_start_height),
             self.asset_change,
             font=self.font30,
             fill=0,
         )
-        draw.rectangle(metadata_divider, fill=0)
-        draw.rectangle(name_divider, fill=0)
         draw.rectangle(change_divider, fill=0)
+
+    def draw_asset_metadata(self, draw):
+        self._draw_meta_divider(draw)
+        self._draw_meta_name(draw)
+        self._draw_meta_price(draw)
+        self._draw_meta_change(draw)
 
     def get_image(self, flipped=False) -> Image:
         image = Image.new("1", (self.width, self.height), 255)
