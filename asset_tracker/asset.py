@@ -5,8 +5,8 @@ class Asset:
     def __init__(self, symbol):
         self.yf_ticker = yf.Ticker(symbol)
         self._name = symbol
-        self._price = self.get_latest_price()
-
+        self.refresh()
+    
     @property
     def name(self):
         return self._name
@@ -22,7 +22,17 @@ class Asset:
     @price.setter
     def price(self, value):
         self._price = value
+    
+    @property
+    def change(self):
+        return self._change
 
-    def get_latest_price(self):
-        latest_data = self.yf_ticker.history()
-        return latest_data["Close"].iloc[-1]
+    @change.setter
+    def change(self, value):
+        self._change = value
+
+    def refresh(self):
+        _history = self.yf_ticker.history()
+        self._price = _history["Close"].iloc[-1]
+        prev_close = _history["Close"].iloc[-2]
+        self._change = ((self._price-prev_close)/prev_close)*100
