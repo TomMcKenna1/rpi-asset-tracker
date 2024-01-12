@@ -1,41 +1,44 @@
 import argparse
 import logging
+import yaml
 
-from waveshare_epd import epd3in52
+from asset_tracker import ChartDrawer, Asset, DisplayFactory
 
-from asset_tracker import ImageDrawer
-from asset_tracker import Asset
 
-logging.basicConfig(level=logging.DEBUG)
+def get_config() -> any:
+    parser = argparse.ArgumentParser("main.py")
+    parser.add_argument(
+        "ticker_symbol", help="The ticker symbol of the asset being tracked.", type=str
+    )
+    parser.add_argument("--dev", action="store_true")
+    args = parser.parse_args()
+    with open("config.yml") as f:
+        config = yaml.safe_load(f)
+    config["dev"] = args.dev
+    config["ticker_symbol"] = args.ticker_symbol
+    return config
 
-parser = argparse.ArgumentParser("main.py")
-parser.add_argument(
-    "ticker_symbol", help="The ticker symbol of the asset being tracked.", type=str
-)
-args = parser.parse_args()
 
-logging.info("Initialising display...")
-epd = epd3in52.EPD()
-epd.init()
-epd.display_NUM(epd.WHITE)
-epd.lut_GC()
-epd.refresh()
+def start_monitoring(display, config):
+    logging.info("Gathering latest data...")
+    asset = Asset(config["ticker_symbol"])
+    logging.info("Data gathered.")
+    logging.info("Drawing image...")
+    chart_drawer = ChartDrawer(display.get_width(), display.get_height(), asset)
+    latest_image = chart_drawer.get_image(flipped=config["display"]["flipped"])
+    logging.info("Image completed.")
+    logging.info("Sending to display...")
+    # latest_image.show()
+    display.update(latest_image)
+    logging.info("Finished, sleeping the display.")
+    display.enter_standby()
 
-epd.send_command(0x50)
-epd.send_data(0x17)
-logging.info("Display initialised.")
 
-logging.info("Gathering latest data...")
-asset = Asset(args.ticker_symbol)
-logging.info("Data gathered.")
-logging.info("Drawing image...")
-image_drawer = ImageDrawer(360, 240, asset)
-latest_image = image_drawer.get_image()
-logging.info("Image completed.")
-logging.info("Sending to display...")
-# latest_image.show()
-epd.display(epd.getbuffer(latest_image))
-epd.lut_GC()
-epd.refresh()
-logging.info("Finished, sleeping the display.")
-epd.sleep()
+if __name__ == "__main__":
+    config = get_config()
+    if config["dev"]:
+        logging.basicConfig(level=logging.DEBUG)
+        display = DisplayFactory.get("dev")
+    else:
+        display = DisplayFactory.get(config["display"]["name"])
+    start_monitoring(display, config)

@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 from .asset import Asset
 
 
-class ImageDrawer:
+class ChartDrawer:
     def __init__(
         self,
         width: int,
@@ -18,9 +18,9 @@ class ImageDrawer:
         self.asset_last_close = str(round(asset.price, 2))
         self.asset_change = str(round(asset.change, 2)) + "%"
         self.asset_history = asset.history
-        self.font30 = ImageFont.truetype(font, size=font_size)
-        self.font30.set_variation_by_name("ExtraBold")
-        ascent, descent = self.font30.getmetrics()
+        self.font = ImageFont.truetype(font, size=font_size)
+        self.font.set_variation_by_name("ExtraBold")
+        ascent, descent = self.font.getmetrics()
         self.meta_font_height = ascent + descent
         self.bar_thickness = 1
         self.meta_start_height = self.height - self.meta_font_height
@@ -36,7 +36,7 @@ class ImageDrawer:
         draw.rectangle(metadata_divider, fill=0)
 
     def _draw_meta_name(self, draw):
-        name_text_length = self.font30.getlength(self.asset_name)
+        name_text_length = self.font.getlength(self.asset_name)
         name_divider = [
             (
                 20 + name_text_length,
@@ -50,22 +50,22 @@ class ImageDrawer:
         draw.text(
             (10, self.meta_start_height),
             self.asset_name,
-            font=self.font30,
+            font=self.font,
             fill=0,
         )
         draw.rectangle(name_divider, fill=0)
 
     def _draw_meta_price(self, draw):
-        last_close_text_length = self.font30.getlength(self.asset_last_close)
+        last_close_text_length = self.font.getlength(self.asset_last_close)
         draw.text(
             (self.width // 2 - last_close_text_length // 2, self.meta_start_height),
             self.asset_last_close,
-            font=self.font30,
+            font=self.font,
             fill=0,
         )
 
     def _draw_meta_change(self, draw):
-        change_text_length = self.font30.getlength(self.asset_change)
+        change_text_length = self.font.getlength(self.asset_change)
         change_divider = [
             (
                 self.width - change_text_length - 20,
@@ -80,7 +80,7 @@ class ImageDrawer:
         draw.text(
             (self.width - change_text_length - 10, self.meta_start_height),
             self.asset_change,
-            font=self.font30,
+            font=self.font,
             fill=0,
         )
         draw.rectangle(change_divider, fill=0)
@@ -116,12 +116,18 @@ class ImageDrawer:
             (
                 start - 3,
                 self.meta_start_height
-                - ((open_close_top - self.asset_history["Low"].min()) * self.pixel_factor),
+                - (
+                    (open_close_top - self.asset_history["Low"].min())
+                    * self.pixel_factor
+                ),
             ),
             (
                 start + 2,
                 self.meta_start_height
-                - ((open_close_bottom - self.asset_history["Low"].min()) * self.pixel_factor),
+                - (
+                    (open_close_bottom - self.asset_history["Low"].min())
+                    * self.pixel_factor
+                ),
             ),
         ]
         draw.rectangle(high_low_line, fill=0)
@@ -129,7 +135,7 @@ class ImageDrawer:
 
     def draw_history(self, draw, candles=False):
         start = 10
-        increment = (self.width)/len(self.asset_history.index)
+        increment = (self.width) / len(self.asset_history.index)
         for open, high, low, close in zip(
             self.asset_history["Open"],
             self.asset_history["High"],
@@ -139,7 +145,7 @@ class ImageDrawer:
             self.draw_candle(draw, start, open, high, low, close)
             start += int(increment)
 
-    def get_image(self, flipped=False) -> Image:
+    def get_image(self, flipped=False) -> Image.Image:
         image = Image.new("1", (self.width, self.height), 255)
         draw = ImageDraw.Draw(image)
         self.draw_asset_metadata(draw)
