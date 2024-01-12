@@ -20,8 +20,8 @@ class ChartDrawer:
         self.asset_history = asset.history
         self.font = ImageFont.truetype(font, size=font_size)
         self.font.set_variation_by_name("ExtraBold")
-        ascent, descent = self.font.getmetrics()
-        self.meta_font_height = ascent + descent
+        font_top, font_bottom = self.font.getmetrics()
+        self.meta_font_height = font_top + font_bottom
         self.bar_thickness = 1
         self.meta_start_height = self.height - self.meta_font_height
         self.asset_low = self.asset_history["Low"].min()
@@ -85,13 +85,13 @@ class ChartDrawer:
         )
         draw.rectangle(change_divider, fill=0)
 
-    def draw_asset_metadata(self, draw):
+    def _draw_asset_metadata(self, draw):
         self._draw_meta_divider(draw)
         self._draw_meta_name(draw)
         self._draw_meta_price(draw)
         self._draw_meta_change(draw)
 
-    def draw_candle(self, draw, start, open, high, low, close):
+    def _draw_candle(self, draw, start, open, high, low, close):
         if open < close:
             open_close_top = close
             open_close_bottom = open
@@ -133,7 +133,7 @@ class ChartDrawer:
         draw.rectangle(high_low_line, fill=0)
         draw.rectangle(open_close_bar, fill=fill, outline=0)
 
-    def draw_history(self, draw, candles=False):
+    def _draw_history(self, draw, candles=False):
         start = 10
         increment = (self.width) / len(self.asset_history.index)
         for open, high, low, close in zip(
@@ -142,14 +142,14 @@ class ChartDrawer:
             self.asset_history["Low"],
             self.asset_history["Close"],
         ):
-            self.draw_candle(draw, start, open, high, low, close)
+            self._draw_candle(draw, start, open, high, low, close)
             start += int(increment)
 
     def get_image(self, flipped=False) -> Image.Image:
         image = Image.new("1", (self.width, self.height), 255)
         draw = ImageDraw.Draw(image)
-        self.draw_asset_metadata(draw)
-        self.draw_history(draw, candles=True)
+        self._draw_asset_metadata(draw)
+        self._draw_history(draw, candles=True)
         if flipped:
             return image.transpose(Image.FLIP_TOP_BOTTOM).transpose(
                 Image.FLIP_LEFT_RIGHT
