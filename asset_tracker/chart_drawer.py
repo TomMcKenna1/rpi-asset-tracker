@@ -102,48 +102,53 @@ class ChartDrawer:
             fill = 0
         high_low_line = [
             (
-                start - 1,
-                self.meta_start_height
-                - ((high - self.asset_history["Low"].min()) * self.pixel_factor),
+                start,
+                self.meta_start_height - ((high - self.asset_low) * self.pixel_factor),
             ),
             (
                 start,
-                self.meta_start_height
-                - ((low - self.asset_history["Low"].min()) * self.pixel_factor),
+                self.meta_start_height - ((low - self.asset_low) * self.pixel_factor),
             ),
         ]
         open_close_bar = [
             (
-                start - 3,
+                start - 2,
                 self.meta_start_height
-                - (
-                    (open_close_top - self.asset_history["Low"].min())
-                    * self.pixel_factor
-                ),
+                - ((open_close_top - self.asset_low) * self.pixel_factor),
             ),
             (
                 start + 2,
                 self.meta_start_height
-                - (
-                    (open_close_bottom - self.asset_history["Low"].min())
-                    * self.pixel_factor
-                ),
+                - ((open_close_bottom - self.asset_low) * self.pixel_factor),
             ),
         ]
-        draw.rectangle(high_low_line, fill=0)
+        draw.line(high_low_line)
         draw.rectangle(open_close_bar, fill=fill, outline=0)
 
     def _draw_history(self, draw, candles=False):
         start = 10
-        increment = (self.width) / len(self.asset_history.index)
-        for open, high, low, close in zip(
-            self.asset_history["Open"],
-            self.asset_history["High"],
-            self.asset_history["Low"],
-            self.asset_history["Close"],
-        ):
-            self._draw_candle(draw, start, open, high, low, close)
-            start += int(increment)
+        increment = (self.width - 10) / len(self.asset_history.index)
+        if candles:
+            for x, (open, high, low, close) in enumerate(
+                zip(
+                    self.asset_history["Open"],
+                    self.asset_history["High"],
+                    self.asset_history["Low"],
+                    self.asset_history["Close"],
+                )
+            ):
+                self._draw_candle(draw, start + (increment * x), open, high, low, close)
+        else:
+            draw.line(
+                [
+                    (
+                        start + (increment * x),
+                        self.meta_start_height
+                        - ((y - self.asset_low) * self.pixel_factor),
+                    )
+                    for x, y in enumerate(self.asset_history["Close"])
+                ]
+            )
 
     def get_image(self, flipped=False) -> Image.Image:
         image = Image.new("1", (self.width, self.height), 255)
