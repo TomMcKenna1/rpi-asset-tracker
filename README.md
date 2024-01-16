@@ -1,6 +1,8 @@
 # rpi_asset_tracker
 An always-on asset tracker for use with a raspberrypi and an e-ink display.
 
+Can track any asset supported by yfinance. Supports multiple assets concurrently.
+
 Start with fresh rpi zero 2 W with raspberry pi OS Lite
 
 # Enable SPI Interface
