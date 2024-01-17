@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 from .asset import Asset
 
 
-class ChartDrawer:
+class ChartRenderer:
     def __init__(
         self,
         width: int,
@@ -98,6 +98,7 @@ class ChartDrawer:
         self._draw_meta_change(draw)
 
     def _draw_candle(self, draw, start, asset_low, open, high, low, close):
+        candle_width = ((self.width - 20) / len(self.asset.history.index)) // 3
         if open < close:
             open_close_top = close
             open_close_bottom = open
@@ -118,12 +119,12 @@ class ChartDrawer:
         ]
         open_close_bar = [
             (
-                start - 2,
+                start - candle_width,
                 self.meta_start_height
                 - ((open_close_top - asset_low) * self.pixel_factor),
             ),
             (
-                start + 2,
+                start + candle_width,
                 self.meta_start_height
                 - ((open_close_bottom - asset_low) * self.pixel_factor),
             ),

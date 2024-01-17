@@ -3,11 +3,12 @@ display:
   flipped: false
 
 assets:
-  - name: "ETH-USD"
-  - name: "^GSPC"
-  - name: "BTC-USD"
+  - ticker: "^GSPC"
+    name: "S&P500"
+  - ticker: "BTC-USD"
+    name: "BTC"
 
-candles: false
+candles: true
 
 # Please enter a number in seconds
-refresh_rate: 10 
+refresh_delay: 20

@@ -5,7 +5,7 @@ import time
 import yaml
 from PIL import Image
 
-from asset_tracker import ChartDrawer, Asset, DisplayFactory
+from asset_tracker import ChartRenderer, Asset, DisplayFactory
 
 
 def get_config() -> any:
@@ -22,12 +22,12 @@ def start_monitoring(display, config):
     logging.info("Initialising asset(s)...")
     assets = []
     for asset in config["assets"]:
-        assets.append(Asset(asset["name"]))
+        assets.append(Asset(asset["ticker"], asset.get("name")))
     logging.info("Initialising renderers...")
-    chart_drawers = []
+    renderers = []
     for asset in assets:
-        chart_drawers.append(
-            ChartDrawer(
+        renderers.append(
+            ChartRenderer(
                 display.width,
                 display.height // len(assets),
                 asset,
@@ -35,25 +35,26 @@ def start_monitoring(display, config):
                 flipped=config["display"]["flipped"],
             )
         )
-    prev_change = -1
+    prev_change = [float("inf")] * len(assets)
     logging.info("Monitoring asset...")
     while True:
-        logging.debug("Refreshing asset...")
-        asset.refresh()
-        curr_change = "{:.2f}".format(asset.change)
+        logging.debug("Refreshing asset(s)...")
+        curr_change = []
+        for asset in assets:
+            asset.refresh()
+            curr_change.append("{:.2f}".format(asset.change))
         if curr_change != prev_change:
             logging.info("Asset change detected")
             display.init()
-            images = []
-            for chart_drawer in chart_drawers:
-                images.append(chart_drawer.get_image())
             main_image = Image.new("1", (display.width, display.height), 255)
-            for i, image in enumerate(images):
-                main_image.paste(image, (0, i * (display.height // len(assets))))
+            for i, renderer in enumerate(renderers):
+                main_image.paste(
+                    renderer.get_image(), (0, i * (display.height // len(assets)))
+                )
             display.update(main_image)
             display.enter_standby()
         prev_change = curr_change
-        time.sleep(config["refresh_rate"])
+        time.sleep(config["refresh_delay"])
 
 
 if __name__ == "__main__":
