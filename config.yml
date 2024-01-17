@@ -4,7 +4,7 @@ display:
 
 assets:
   - ticker: "^GSPC"
-    name: "S&P500"
+    name: "S&P 500"
   - ticker: "BTC-USD"
     name: "BTC"
 
