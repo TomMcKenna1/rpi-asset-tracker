@@ -1,3 +1,6 @@
 display:
   name: "waveshare_3in52"
   flipped: false
+
+chart:
+  candles: true

@@ -9,6 +9,7 @@ class ChartDrawer:
         width: int,
         height: int,
         asset: Asset,
+        flipped: bool = False,
         font: str = "Roboto.ttf",
         font_size: int = 30,
     ):
@@ -18,14 +19,15 @@ class ChartDrawer:
         self.asset_last_close = str(round(asset.price, 2))
         self.asset_change = str(round(asset.change, 2)) + "%"
         self.asset_history = asset.history
+        self.asset_low = self.asset_history["Low"].min()
+        self.asset_high = self.asset_history["High"].max()
+        self.flipped = flipped
         self.font = ImageFont.truetype(font, size=font_size)
         self.font.set_variation_by_name("ExtraBold")
         font_top, font_bottom = self.font.getmetrics()
         self.meta_font_height = font_top + font_bottom
         self.bar_thickness = 1
         self.meta_start_height = self.height - self.meta_font_height
-        self.asset_low = self.asset_history["Low"].min()
-        self.asset_high = self.asset_history["High"].max()
         self.pixel_factor = self.meta_start_height / (self.asset_high - self.asset_low)
 
     def _draw_meta_divider(self, draw):
@@ -150,12 +152,12 @@ class ChartDrawer:
                 ]
             )
 
-    def get_image(self, flipped=False) -> Image.Image:
+    def get_image(self, candles=False) -> Image.Image:
         image = Image.new("1", (self.width, self.height), 255)
         draw = ImageDraw.Draw(image)
         self._draw_asset_metadata(draw)
-        self._draw_history(draw, candles=True)
-        if flipped:
+        self._draw_history(draw, candles=candles)
+        if self.flipped:
             return image.transpose(Image.FLIP_TOP_BOTTOM).transpose(
                 Image.FLIP_LEFT_RIGHT
             )
