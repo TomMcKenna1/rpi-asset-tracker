@@ -15,12 +15,7 @@ class ChartDrawer:
     ):
         self.width = width
         self.height = height
-        self.asset_name = asset.name
-        self.asset_last_close = str(round(asset.price, 2))
-        self.asset_change = str(round(asset.change, 2)) + "%"
-        self.asset_history = asset.history
-        self.asset_low = self.asset_history["Low"].min()
-        self.asset_high = self.asset_history["High"].max()
+        self.asset = asset
         self.flipped = flipped
         self.font = ImageFont.truetype(font, size=font_size)
         self.font.set_variation_by_name("ExtraBold")
@@ -28,7 +23,12 @@ class ChartDrawer:
         self.meta_font_height = font_top + font_bottom
         self.bar_thickness = 1
         self.meta_start_height = self.height - self.meta_font_height
-        self.pixel_factor = self.meta_start_height / (self.asset_high - self.asset_low)
+
+    @property
+    def pixel_factor(self):
+        return self.meta_start_height / (
+            self.asset.history["High"].max() - self.asset.history["Low"].min()
+        )
 
     def _draw_meta_divider(self, draw):
         metadata_divider = [
@@ -38,7 +38,7 @@ class ChartDrawer:
         draw.rectangle(metadata_divider, fill=0)
 
     def _draw_meta_name(self, draw):
-        name_text_length = self.font.getlength(self.asset_name)
+        name_text_length = self.font.getlength(self.asset.name)
         name_divider = [
             (
                 20 + name_text_length,
@@ -51,23 +51,25 @@ class ChartDrawer:
         ]
         draw.text(
             (10, self.meta_start_height),
-            self.asset_name,
+            self.asset.name,
             font=self.font,
             fill=0,
         )
         draw.rectangle(name_divider, fill=0)
 
     def _draw_meta_price(self, draw):
-        last_close_text_length = self.font.getlength(self.asset_last_close)
+        asset_last_close = "{:.2f}".format(self.asset.price)
+        last_close_text_length = self.font.getlength(asset_last_close)
         draw.text(
             (self.width // 2 - last_close_text_length // 2, self.meta_start_height),
-            self.asset_last_close,
+            asset_last_close,
             font=self.font,
             fill=0,
         )
 
     def _draw_meta_change(self, draw):
-        change_text_length = self.font.getlength(self.asset_change)
+        asset_change = "{:.2f}".format(self.asset.change)
+        change_text_length = self.font.getlength(asset_change)
         change_divider = [
             (
                 self.width - change_text_length - 20,
@@ -81,7 +83,7 @@ class ChartDrawer:
 
         draw.text(
             (self.width - change_text_length - 10, self.meta_start_height),
-            self.asset_change,
+            asset_change,
             font=self.font,
             fill=0,
         )
@@ -93,7 +95,7 @@ class ChartDrawer:
         self._draw_meta_price(draw)
         self._draw_meta_change(draw)
 
-    def _draw_candle(self, draw, start, open, high, low, close):
+    def _draw_candle(self, draw, start, asset_low, open, high, low, close):
         if open < close:
             open_close_top = close
             open_close_bottom = open
@@ -105,50 +107,52 @@ class ChartDrawer:
         high_low_line = [
             (
                 start,
-                self.meta_start_height - ((high - self.asset_low) * self.pixel_factor),
+                self.meta_start_height - ((high - asset_low) * self.pixel_factor),
             ),
             (
                 start,
-                self.meta_start_height - ((low - self.asset_low) * self.pixel_factor),
+                self.meta_start_height - ((low - asset_low) * self.pixel_factor),
             ),
         ]
         open_close_bar = [
             (
                 start - 2,
                 self.meta_start_height
-                - ((open_close_top - self.asset_low) * self.pixel_factor),
+                - ((open_close_top - asset_low) * self.pixel_factor),
             ),
             (
                 start + 2,
                 self.meta_start_height
-                - ((open_close_bottom - self.asset_low) * self.pixel_factor),
+                - ((open_close_bottom - asset_low) * self.pixel_factor),
             ),
         ]
         draw.line(high_low_line)
         draw.rectangle(open_close_bar, fill=fill, outline=0)
 
     def _draw_history(self, draw, candles=False):
+        asset_low = self.asset.history["Low"].min()
         start = 10
-        increment = (self.width - 10) / len(self.asset_history.index)
+        increment = (self.width - 10) / len(self.asset.history.index)
         if candles:
             for x, (open, high, low, close) in enumerate(
                 zip(
-                    self.asset_history["Open"],
-                    self.asset_history["High"],
-                    self.asset_history["Low"],
-                    self.asset_history["Close"],
+                    self.asset.history["Open"],
+                    self.asset.history["High"],
+                    self.asset.history["Low"],
+                    self.asset.history["Close"],
                 )
             ):
-                self._draw_candle(draw, start + (increment * x), open, high, low, close)
+                self._draw_candle(
+                    draw, start + (increment * x), asset_low, open, high, low, close
+                )
         else:
             draw.line(
                 [
                     (
                         start + (increment * x),
-                        self.meta_start_height
-                        - ((y - self.asset_low) * self.pixel_factor),
+                        self.meta_start_height - ((y - asset_low) * self.pixel_factor),
                     )
-                    for x, y in enumerate(self.asset_history["Close"])
+                    for x, y in enumerate(self.asset.history["Close"])
                 ]
             )
 

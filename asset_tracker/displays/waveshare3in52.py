@@ -16,16 +16,7 @@ class Waveshare3in52(Display):
     """
 
     def __init__(self):
-        logging.info("Initialising display...")
         self.epd = epd3in52.EPD()
-        self.epd.init()
-        self.epd.display_NUM(self.epd.WHITE)
-        self.epd.lut_GC()
-        self.epd.refresh()
-
-        self.epd.send_command(0x50)
-        self.epd.send_data(0x17)
-        logging.info("Display initialised.")
 
     @property
     def width(self) -> int:
@@ -34,6 +25,14 @@ class Waveshare3in52(Display):
     @property
     def height(self) -> int:
         return epd.height
+
+    def init(self):
+        self.epd.init()
+        self.epd.display_NUM(self.epd.WHITE)
+        self.epd.lut_GC()
+        self.epd.refresh()
+        self.epd.send_command(0x50)
+        self.epd.send_data(0x17)
 
     def update(self, image):
         self.epd.display(self.epd.getbuffer(image))

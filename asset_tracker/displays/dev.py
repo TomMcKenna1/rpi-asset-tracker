@@ -28,6 +28,9 @@ class Dev(Display):
     def height(self, value) -> None:
         self._height = value
 
+    def init(self):
+        pass
+
     def update(self, image):
         image.show()
 

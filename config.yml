@@ -4,3 +4,6 @@ display:
 
 chart:
   candles: true
+
+# Please enter a number in seconds
+refresh_rate: 10 

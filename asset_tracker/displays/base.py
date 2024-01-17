@@ -15,6 +15,10 @@ class Display(ABC):
         pass
 
     @abstractmethod
+    def init(self):
+        pass
+
+    @abstractmethod
     def update(self, image: Image.Image):
         pass
 
