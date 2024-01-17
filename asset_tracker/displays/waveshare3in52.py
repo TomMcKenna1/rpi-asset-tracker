@@ -39,5 +39,8 @@ class Waveshare3in52(Display):
         self.epd.lut_GC()
         self.epd.refresh()
 
+    def clear(self):
+        self.epd.Clear()
+
     def enter_standby(self):
         self.epd.sleep()

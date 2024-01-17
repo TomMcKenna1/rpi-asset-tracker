@@ -34,5 +34,8 @@ class Dev(Display):
     def update(self, image):
         image.show()
 
+    def clear(self):
+        pass
+
     def enter_standby(self):
         pass

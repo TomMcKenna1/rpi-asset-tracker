@@ -56,6 +56,7 @@ if __name__ == "__main__":
             display = DisplayFactory.get(config["display"]["name"])
         start_monitoring(display, config)
     except KeyboardInterrupt:
-        logging.info("Sleeping display...")
+        logging.info("Clearing and sleeping display...")
+        display.clear()
         display.enter_standby()
         logging.info("Exited successfully")

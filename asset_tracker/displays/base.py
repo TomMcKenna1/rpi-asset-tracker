@@ -23,5 +23,9 @@ class Display(ABC):
         pass
 
     @abstractmethod
+    def clear(self):
+        pass
+
+    @abstractmethod
     def enter_standby(self):
         pass
