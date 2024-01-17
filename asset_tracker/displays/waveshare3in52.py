@@ -11,6 +11,10 @@ from .display_factory import DisplayFactory
 
 @DisplayFactory.register("waveshare_3in52")
 class Waveshare3in52(Display):
+    """
+    Display class supporting a waveshare 3"52 e-ink display
+    """
+
     def __init__(self):
         logging.info("Initialising display...")
         self.epd = epd3in52.EPD()
@@ -23,10 +27,12 @@ class Waveshare3in52(Display):
         self.epd.send_data(0x17)
         logging.info("Display initialised.")
 
-    def get_width(self) -> int:
+    @property
+    def width(self) -> int:
         return epd.width
 
-    def get_height(self) -> int:
+    @property
+    def height(self) -> int:
         return epd.height
 
     def update(self, image):

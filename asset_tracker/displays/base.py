@@ -4,12 +4,14 @@ from PIL import Image
 
 
 class Display(ABC):
+    @property
     @abstractmethod
-    def get_width(self) -> int:
+    def width(self) -> int:
         pass
 
+    @property
     @abstractmethod
-    def get_height(self) -> int:
+    def height(self) -> int:
         pass
 
     @abstractmethod

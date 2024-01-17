@@ -24,7 +24,9 @@ def start_monitoring(display, config):
     asset = Asset(config["ticker_symbol"])
     logging.info("Data gathered.")
     logging.info("Drawing image...")
-    chart_drawer = ChartDrawer(display.get_width(), display.get_height(), asset, flipped=config["display"]["flipped"])
+    chart_drawer = ChartDrawer(
+        display.width, display.height, asset, flipped=config["display"]["flipped"]
+    )
     latest_image = chart_drawer.get_image(candles=config["chart"]["candles"])
     logging.info("Image completed.")
     logging.info("Sending to display...")
