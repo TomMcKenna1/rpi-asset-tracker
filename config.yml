@@ -2,8 +2,12 @@ display:
   name: "waveshare_3in52"
   flipped: false
 
-chart:
-  candles: true
+assets:
+  - name: "ETH-USD"
+  - name: "^GSPC"
+  - name: "BTC-USD"
+
+candles: false
 
 # Please enter a number in seconds
 refresh_rate: 10 

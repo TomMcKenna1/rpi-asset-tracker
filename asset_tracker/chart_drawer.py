@@ -9,6 +9,7 @@ class ChartDrawer:
         width: int,
         height: int,
         asset: Asset,
+        candles: bool = False,
         flipped: bool = False,
         font: str = "Roboto.ttf",
         font_size: int = 30,
@@ -16,6 +17,7 @@ class ChartDrawer:
         self.width = width
         self.height = height
         self.asset = asset
+        self.candles = candles
         self.flipped = flipped
         self.font = ImageFont.truetype(font, size=font_size)
         self.font.set_variation_by_name("ExtraBold")
@@ -68,7 +70,7 @@ class ChartDrawer:
         )
 
     def _draw_meta_change(self, draw):
-        asset_change = "{:.2f}".format(self.asset.change)
+        asset_change = "{:.2f}%".format(self.asset.change)
         change_text_length = self.font.getlength(asset_change)
         change_divider = [
             (
@@ -156,11 +158,11 @@ class ChartDrawer:
                 ]
             )
 
-    def get_image(self, candles=False) -> Image.Image:
+    def get_image(self) -> Image.Image:
         image = Image.new("1", (self.width, self.height), 255)
         draw = ImageDraw.Draw(image)
         self._draw_asset_metadata(draw)
-        self._draw_history(draw, candles=candles)
+        self._draw_history(draw, candles=self.candles)
         if self.flipped:
             return image.transpose(Image.FLIP_TOP_BOTTOM).transpose(
                 Image.FLIP_LEFT_RIGHT
