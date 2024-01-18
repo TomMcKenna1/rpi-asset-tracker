@@ -27,6 +27,10 @@ class Display(ABC):
         pass
 
     @abstractmethod
+    def fast_update(self, image: Image.Image):
+        pass
+
+    @abstractmethod
     def clear(self):
         pass
 

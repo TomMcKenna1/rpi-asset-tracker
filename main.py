@@ -1,12 +1,12 @@
 import argparse
 import logging
-import time
 
 import yaml
-from PIL import Image
 
-from asset_tracker import ChartRenderer, Asset, DisplayFactory
+from asset_monitor import Monitor, ChartRenderer, Asset, DisplayFactory
 
+class ConfigError(Exception):
+    pass
 
 def get_config() -> any:
     parser = argparse.ArgumentParser("main.py")
@@ -18,18 +18,34 @@ def get_config() -> any:
     return config
 
 
-def start_monitoring(display, config):
-    logging.info("Initialising asset(s)...")
+def get_display(config):
+    logging.info("Initialising display...")
+    if config["dev"]:
+        logging.root.setLevel(level=logging.DEBUG)
+        return DisplayFactory.get("dev")
+    else:
+        return DisplayFactory.get(config["display"]["name"])
+
+
+def get_assets(config):
+    logging.info("Initialising assets...")
     assets = []
+    if not config["assets"]:
+        raise ConfigError("No assets provided in config.")
     for asset in config["assets"]:
         assets.append(Asset(asset["ticker"], asset.get("name")))
+    return assets
+
+
+def get_charts(assets, config):
     logging.info("Initialising renderers...")
-    renderers = []
+    screen_split_interval = display.height // len(assets)
+    charts = []
     for asset in assets:
-        renderers.append(
+        charts.append(
             ChartRenderer(
                 display.width,
-                display.height // len(assets),
+                screen_split_interval,
                 asset,
                 candles=config.get("chart", {}).get("candles"),
                 flipped=config.get("display", {}).get("flipped"),
@@ -37,41 +53,19 @@ def start_monitoring(display, config):
                 font_size=config.get("chart", {}).get("font_size"),
             )
         )
-    prev_change = [float("inf")] * len(assets)
-    logging.info("Monitoring asset...")
-    while True:
-        logging.debug("Refreshing asset(s)...")
-        curr_change = []
-        for asset in assets:
-            asset.refresh()
-            curr_change.append("{:.2f}".format(asset.change))
-        if curr_change != prev_change:
-            logging.info("Asset change detected")
-            display.init()
-            main_image = Image.new("1", (display.width, display.height), 255)
-            for i, renderer in enumerate(renderers):
-                main_image.paste(
-                    renderer.get_image(), (0, i * (display.height // len(assets)))
-                )
-            display.update(main_image)
-            display.enter_standby()
-        prev_change = curr_change
-        time.sleep(config["refresh_delay"])
+    return charts
 
 
 if __name__ == "__main__":
+    logging.basicConfig()
+    config = get_config()
+    display = get_display(config)
+    assets = get_assets(config)
+    charts = get_charts(assets, config)
+    asset_monitor = Monitor(
+        display, assets, charts, refresh_delay=config.get("refresh_delay", 180)
+    )
     try:
-        logging.basicConfig()
-        config = get_config()
-        logging.info("Initialising display...")
-        if config["dev"]:
-            logging.root.setLevel(level=logging.DEBUG)
-            display = DisplayFactory.get("dev")
-        else:
-            display = DisplayFactory.get(config["display"]["name"])
-        start_monitoring(display, config)
+        asset_monitor.start()
     except KeyboardInterrupt:
-        logging.info("Clearing and sleeping display...")
-        display.clear()
-        display.enter_standby()
-        logging.info("Exited successfully")
+        asset_monitor.stop()

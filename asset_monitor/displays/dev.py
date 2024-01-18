@@ -34,6 +34,9 @@ class Dev(Display):
     def update(self, image):
         image.show()
 
+    def fast_update(self, image):
+        image.show()
+
     def clear(self):
         pass
 

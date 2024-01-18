@@ -37,6 +37,11 @@ class Waveshare3in52(Display):
         self.epd.lut_GC()
         self.epd.refresh()
 
+    def fast_update(self, image):
+        self.epd.display(self.epd.getbuffer(image))
+        self.epd.lut_DU()
+        self.epd.refresh()
+
     def clear(self):
         self.epd.Clear()
 
