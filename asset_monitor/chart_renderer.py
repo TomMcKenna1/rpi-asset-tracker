@@ -102,7 +102,7 @@ class ChartRenderer:
         self._draw_metadata_change(draw)
 
     def _draw_candle(self, draw, start, asset_low, open, high, low, close):
-        candle_width = ((self.width - 20) / len(self.asset.history.index)) // 3
+        candle_width = 4*((self.width - 20) / len(self.asset.history.index)) // 10
         if open < close:
             open_close_top = close
             open_close_bottom = open

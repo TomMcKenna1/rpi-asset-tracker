@@ -7,11 +7,9 @@ assets:
     name: "S&P 500"
   - ticker: "BTC-USD"
     name: "BTC"
-  - ticker: "GOOG"
-  - ticker: "MSFT"
 
 chart:
-  candles: false
+  candles: true
   font: "./Roboto.ttf"
   font_size: 30
 
