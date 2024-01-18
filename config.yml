@@ -11,6 +11,7 @@ assets:
 chart:
   candles: true
   font: "./Roboto.ttf"
+  font_variant: "Bold"
   font_size: 30
 
 # Please enter a number in seconds

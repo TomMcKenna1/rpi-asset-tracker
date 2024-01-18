@@ -1,3 +1,5 @@
+from typing import Union
+
 from PIL import Image, ImageDraw, ImageFont
 
 from .asset import Asset
@@ -15,35 +17,40 @@ class ChartRenderer:
         asset: Asset,
         candles: bool = False,
         flipped: bool = False,
-        font: str = "Roboto.ttf",
-        font_size: int = 30,
+        font: Union[str, None] = None,
+        font_variant: Union[str, None] = None,
+        font_size: Union[int, None] = None,
     ):
         self.width = width
         self.height = height
         self.asset = asset
         self.candles = candles
         self.flipped = flipped
-        self.font = ImageFont.truetype(font, size=font_size)
-        self.font.set_variation_by_name("ExtraBold")
+        if font:
+            self.font = ImageFont.truetype(font, size=font_size)
+        else:
+            self.font = ImageFont.load_default(size=font_size)
+        if font_variant:
+            self.font.set_variation_by_name(font_variant)
         font_top, font_bottom = self.font.getmetrics()
         self.meta_font_height = font_top + font_bottom
         self.bar_thickness = 1
         self.meta_start_height = self.height - self.meta_font_height
 
     @property
-    def pixel_factor(self):
+    def pixel_factor(self) -> float:
         return self.meta_start_height / (
             self.asset.history["High"].max() - self.asset.history["Low"].min()
         )
 
-    def _draw_metadata_divider(self, draw):
+    def _draw_metadata_divider(self, draw: ImageDraw.ImageDraw) -> None:
         metadata_divider = [
             (0, self.meta_start_height - self.bar_thickness),
             (self.width, self.meta_start_height),
         ]
         draw.rectangle(metadata_divider, fill=0)
 
-    def _draw_metadata_name(self, draw):
+    def _draw_metadata_name(self, draw: ImageDraw.ImageDraw) -> None:
         name_text_length = self.font.getlength(self.asset.name)
         name_divider = [
             (
@@ -63,7 +70,7 @@ class ChartRenderer:
         )
         draw.rectangle(name_divider, fill=0)
 
-    def _draw_metadata_price(self, draw):
+    def _draw_metadata_price(self, draw: ImageDraw.ImageDraw) -> None:
         asset_last_close = "{:.2f}".format(self.asset.price)
         last_close_text_length = self.font.getlength(asset_last_close)
         draw.text(
@@ -73,7 +80,7 @@ class ChartRenderer:
             fill=0,
         )
 
-    def _draw_metadata_change(self, draw):
+    def _draw_metadata_change(self, draw: ImageDraw.ImageDraw) -> None:
         asset_change = "{:.2f}%".format(self.asset.change)
         change_text_length = self.font.getlength(asset_change)
         change_divider = [
@@ -95,14 +102,23 @@ class ChartRenderer:
         )
         draw.rectangle(change_divider, fill=0)
 
-    def _draw_asset_metadata(self, draw):
+    def _draw_asset_metadata(self, draw: ImageDraw.ImageDraw) -> None:
         self._draw_metadata_divider(draw)
         self._draw_metadata_name(draw)
         self._draw_metadata_price(draw)
         self._draw_metadata_change(draw)
 
-    def _draw_candle(self, draw, start, asset_low, open, high, low, close):
-        candle_width = 4*((self.width - 20) / len(self.asset.history.index)) // 10
+    def _draw_candle(
+        self,
+        draw: ImageDraw.ImageDraw,
+        start: int,
+        asset_low: float,
+        open: float,
+        high: float,
+        low: float,
+        close: float,
+    ) -> None:
+        candle_width = 4 * ((self.width - 20) / len(self.asset.history.index)) // 10
         if open < close:
             open_close_top = close
             open_close_bottom = open
@@ -136,7 +152,7 @@ class ChartRenderer:
         draw.line(high_low_line)
         draw.rectangle(open_close_bar, fill=fill, outline=0)
 
-    def _draw_history(self, draw, candles=False):
+    def _draw_history(self, draw: ImageDraw.ImageDraw, candles: bool = False) -> None:
         asset_low = self.asset.history["Low"].min()
         start = 10
         increment = (self.width - 10) / len(self.asset.history.index)

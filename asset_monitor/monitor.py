@@ -21,7 +21,7 @@ class Monitor:
         self.charts = charts
         self.refresh_delay = refresh_delay
 
-    def start(self):
+    def start(self) -> None:
         screen_split_interval = self.display.height // len(self.assets)
         prev_change = [float("inf")] * len(self.assets)
         logging.info("Monitoring asset...")

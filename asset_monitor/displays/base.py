@@ -19,21 +19,21 @@ class Display(ABC):
         pass
 
     @abstractmethod
-    def init(self):
+    def init(self) -> None:
         pass
 
     @abstractmethod
-    def update(self, image: Image.Image):
+    def update(self, image: Image.Image) -> None:
         pass
 
     @abstractmethod
-    def fast_update(self, image: Image.Image):
+    def fast_update(self, image: Image.Image) -> None:
         pass
 
     @abstractmethod
-    def clear(self):
+    def clear(self) -> None:
         pass
 
     @abstractmethod
-    def enter_standby(self):
+    def enter_standby(self) -> None:
         pass

@@ -4,9 +4,12 @@ import logging
 import yaml
 
 from asset_monitor import Monitor, ChartRenderer, Asset, DisplayFactory
+from asset_monitor.displays import Display
+
 
 class ConfigError(Exception):
     pass
+
 
 def get_config() -> any:
     parser = argparse.ArgumentParser("main.py")
@@ -18,7 +21,7 @@ def get_config() -> any:
     return config
 
 
-def get_display(config):
+def get_display(config: any) -> Display:
     logging.info("Initialising display...")
     if config["dev"]:
         logging.root.setLevel(level=logging.DEBUG)
@@ -27,17 +30,17 @@ def get_display(config):
         return DisplayFactory.get(config["display"]["name"])
 
 
-def get_assets(config):
+def get_assets(config: any) -> list[Asset]:
     logging.info("Initialising assets...")
     assets = []
-    if not config["assets"]:
+    if not config.get("assets"):
         raise ConfigError("No assets provided in config.")
     for asset in config["assets"]:
         assets.append(Asset(asset["ticker"], asset.get("name")))
     return assets
 
 
-def get_charts(assets, config):
+def get_charts(assets: list[Asset], config: any) -> list[ChartRenderer]:
     logging.info("Initialising renderers...")
     screen_split_interval = display.height // len(assets)
     charts = []
@@ -50,6 +53,7 @@ def get_charts(assets, config):
                 candles=config.get("chart", {}).get("candles"),
                 flipped=config.get("display", {}).get("flipped"),
                 font=config.get("chart", {}).get("font"),
+                font_variant=config.get("chart", {}).get("font_variant"),
                 font_size=config.get("chart", {}).get("font_size"),
             )
         )

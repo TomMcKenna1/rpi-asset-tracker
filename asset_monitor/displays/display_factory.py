@@ -1,3 +1,5 @@
+from typing import Callable, Type
+
 from .base import Display
 
 
@@ -13,8 +15,8 @@ class DisplayFactory:
     _registry = {}
 
     @classmethod
-    def register(cls, id):
-        def wrapper(class_obj):
+    def register(cls, id: str) -> Callable[..., Type[Display]]:
+        def wrapper(class_obj: Type[Display]) -> Type[Display]:
             if id in cls._registry:
                 raise ValueError(f"{id} already exists in display registry.")
             else:

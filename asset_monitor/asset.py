@@ -39,5 +39,5 @@ class Asset:
         prev_close = self._history["Close"].iloc[-2]
         return ((self.price - prev_close) / prev_close) * 100
 
-    def refresh(self):
+    def refresh(self) -> None:
         self._history = self.yf_ticker.history()
