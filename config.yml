@@ -1,5 +1,5 @@
 display:
-  name: "waveshare_3in52"
+  id: "waveshare_3in52"
   flipped: false
 
 assets:
@@ -8,7 +8,10 @@ assets:
   - ticker: "BTC-USD"
     name: "BTC"
 
-candles: true
+chart:
+  candles: true
+  font: "./Roboto.ttf"
+  font_size: 30
 
 # Please enter a number in seconds
 refresh_delay: 20

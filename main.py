@@ -31,8 +31,10 @@ def start_monitoring(display, config):
                 display.width,
                 display.height // len(assets),
                 asset,
-                candles=config["candles"],
-                flipped=config["display"]["flipped"],
+                candles=config.get("chart", {}).get("candles"),
+                flipped=config.get("display", {}).get("flipped"),
+                font=config.get("chart", {}).get("font"),
+                font_size=config.get("chart", {}).get("font_size"),
             )
         )
     prev_change = [float("inf")] * len(assets)

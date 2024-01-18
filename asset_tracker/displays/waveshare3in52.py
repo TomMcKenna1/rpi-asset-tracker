@@ -1,5 +1,3 @@
-import logging
-
 try:
     from waveshare_epd import epd3in52
 except ImportError:
@@ -12,7 +10,7 @@ from .display_factory import DisplayFactory
 @DisplayFactory.register("waveshare_3in52")
 class Waveshare3in52(Display):
     """
-    Display class supporting a waveshare 3"52 e-ink display
+    Display class providing methods for a Waveshare 3"52 e-ink display.
     """
 
     def __init__(self):

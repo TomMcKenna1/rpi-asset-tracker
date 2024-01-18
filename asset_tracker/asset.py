@@ -6,12 +6,13 @@ from pandas import DataFrame
 
 class Asset:
     """
-    Wrapper class to yfinance Ticker
+    Wrapper class to yfinance Ticker.
     """
 
     def __init__(self, ticker: str, name: Union[str, None] = None):
         self.yf_ticker = yf.Ticker(ticker)
         self._ticker = ticker
+        # An asset's name is it's ticker unless specified
         self._name = ticker
         if name != None:
             self._name = name

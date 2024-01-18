@@ -5,7 +5,7 @@ from .display_factory import DisplayFactory
 @DisplayFactory.register("dev")
 class Dev(Display):
     """
-    Display class to be used only for development purposes
+    Display class to be used only for development purposes.
     """
 
     def __init__(self, width: int = 360, height: int = 240):

@@ -4,6 +4,10 @@ from .asset import Asset
 
 
 class ChartRenderer:
+    """
+    Class to render chart images of an asset.
+    """
+
     def __init__(
         self,
         width: int,
@@ -32,14 +36,14 @@ class ChartRenderer:
             self.asset.history["High"].max() - self.asset.history["Low"].min()
         )
 
-    def _draw_meta_divider(self, draw):
+    def _draw_metadata_divider(self, draw):
         metadata_divider = [
             (0, self.meta_start_height - self.bar_thickness),
             (self.width, self.meta_start_height),
         ]
         draw.rectangle(metadata_divider, fill=0)
 
-    def _draw_meta_name(self, draw):
+    def _draw_metadata_name(self, draw):
         name_text_length = self.font.getlength(self.asset.name)
         name_divider = [
             (
@@ -59,7 +63,7 @@ class ChartRenderer:
         )
         draw.rectangle(name_divider, fill=0)
 
-    def _draw_meta_price(self, draw):
+    def _draw_metadata_price(self, draw):
         asset_last_close = "{:.2f}".format(self.asset.price)
         last_close_text_length = self.font.getlength(asset_last_close)
         draw.text(
@@ -69,7 +73,7 @@ class ChartRenderer:
             fill=0,
         )
 
-    def _draw_meta_change(self, draw):
+    def _draw_metadata_change(self, draw):
         asset_change = "{:.2f}%".format(self.asset.change)
         change_text_length = self.font.getlength(asset_change)
         change_divider = [
@@ -92,10 +96,10 @@ class ChartRenderer:
         draw.rectangle(change_divider, fill=0)
 
     def _draw_asset_metadata(self, draw):
-        self._draw_meta_divider(draw)
-        self._draw_meta_name(draw)
-        self._draw_meta_price(draw)
-        self._draw_meta_change(draw)
+        self._draw_metadata_divider(draw)
+        self._draw_metadata_name(draw)
+        self._draw_metadata_price(draw)
+        self._draw_metadata_change(draw)
 
     def _draw_candle(self, draw, start, asset_low, open, high, low, close):
         candle_width = ((self.width - 20) / len(self.asset.history.index)) // 3

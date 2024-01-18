@@ -4,6 +4,10 @@ from PIL import Image
 
 
 class Display(ABC):
+    """
+    The base class for a display implementation.
+    """
+
     @property
     @abstractmethod
     def width(self) -> int:
