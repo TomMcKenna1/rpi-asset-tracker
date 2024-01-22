@@ -1,5 +1,6 @@
 import logging
 import time
+from datetime import datetime
 
 from PIL import Image
 
@@ -15,14 +16,35 @@ class Monitor:
         assets: list[Asset],
         charts: list[ChartRenderer],
         refresh_delay: int = 180,
+        screen_safe: bool = True,
+        screen_safe_interval: int = 86400,
     ):
         self.display = display
         self.assets = assets
         self.charts = charts
         self.refresh_delay = refresh_delay
+        self.screen_safe = screen_safe
+        self.screen_safe_interval = screen_safe_interval
+        self.last_full_refresh = datetime.now()
+
+    def _update_display(self):
+        screen_split_interval = self.display.height // len(self.assets)
+        self.display.wake_up()
+        image = Image.new("1", (self.display.width, self.display.height), 255)
+        for i, chart in enumerate(self.charts):
+            image.paste(chart.get_image(), (0, i * (screen_split_interval)))
+        if (
+            self.screen_safe
+            and (datetime.now() - self.last_full_refresh).seconds
+            > self.screen_safe_interval
+        ):
+            self.last_full_refresh = datetime.now()
+            self.display.update(image)
+        else:
+            self.display.fast_update(image)
+        self.display.sleep()
 
     def start(self) -> None:
-        screen_split_interval = self.display.height // len(self.assets)
         prev_change = [float("inf")] * len(self.assets)
         logging.info("Monitoring asset...")
         self.display.init()
@@ -34,16 +56,7 @@ class Monitor:
                 curr_change.append("{:.2f}".format(asset.change))
             if curr_change != prev_change:
                 logging.info("Asset change detected")
-                self.display.wake_up()
-                main_image = Image.new(
-                    "1", (self.display.width, self.display.height), 255
-                )
-                for i, chart in enumerate(self.charts):
-                    main_image.paste(
-                        chart.get_image(), (0, i * (screen_split_interval))
-                    )
-                self.display.fast_update(main_image)
-                self.display.sleep()
+                self._update_display()
             prev_change = curr_change
             time.sleep(self.refresh_delay)
 

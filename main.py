@@ -67,9 +67,13 @@ if __name__ == "__main__":
     assets = get_assets(config)
     charts = get_charts(assets, config)
     asset_monitor = Monitor(
-        display, assets, charts, refresh_delay=config.get("refresh_delay", 180)
+        display,
+        assets,
+        charts,
+        refresh_delay=config.get("refresh_delay", 180),
+        screen_safe_interval=config.get("screen_safe_interval", 86400),
     )
     try:
         asset_monitor.start()
     except KeyboardInterrupt:
-        asset_monitor.stop()black
+        asset_monitor.stop()
