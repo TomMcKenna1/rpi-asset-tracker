@@ -38,9 +38,11 @@ class Monitor:
             and (datetime.now() - self.last_full_refresh).seconds
             > self.screen_safe_interval
         ):
+            logging.debug("Refreshing screen via screen safe refresh...")
             self.last_full_refresh = datetime.now()
             self.display.update(image)
         else:
+            logging.debug("Refreshing screen via fast refresh...")
             self.display.fast_update(image)
         self.display.sleep()
 
@@ -61,7 +63,6 @@ class Monitor:
             time.sleep(self.refresh_delay)
 
     def stop(self):
-        logging.info("Clearing and sleeping display...")
+        logging.info("Stopping monitor...")
         self.display.clear()
         self.display.sleep()
-        logging.info("Monitor stopped successfully")
