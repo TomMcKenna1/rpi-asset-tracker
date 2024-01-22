@@ -28,17 +28,20 @@ class Dev(Display):
     def height(self, value) -> None:
         self._height = value
 
-    def init(self):
+    def init(self) -> None:
         pass
 
-    def update(self, image):
+    def update(self, image) -> None:
         image.show()
 
-    def fast_update(self, image):
+    def fast_update(self, image) -> None:
         image.show()
 
-    def clear(self):
+    def clear(self) -> None:
         pass
 
-    def enter_standby(self):
+    def sleep(self) -> None:
+        pass
+
+    def wake_up(self) -> None:
         pass

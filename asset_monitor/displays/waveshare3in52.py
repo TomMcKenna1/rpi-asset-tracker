@@ -1,3 +1,5 @@
+from PIL import Image
+
 try:
     from waveshare_epd import epd3in52
 except ImportError:
@@ -18,13 +20,13 @@ class Waveshare3in52(Display):
 
     @property
     def width(self) -> int:
-        return epd.width
+        return self.epd.height
 
     @property
     def height(self) -> int:
-        return epd.height
+        return self.epd.width
 
-    def init(self):
+    def init(self) -> None:
         self.epd.init()
         self.epd.display_NUM(self.epd.WHITE)
         self.epd.lut_GC()
@@ -32,18 +34,21 @@ class Waveshare3in52(Display):
         self.epd.send_command(0x50)
         self.epd.send_data(0x17)
 
-    def update(self, image):
+    def update(self, image: Image.Image) -> None:
         self.epd.display(self.epd.getbuffer(image))
         self.epd.lut_GC()
         self.epd.refresh()
 
-    def fast_update(self, image):
+    def fast_update(self, image: Image.Image) -> None:
         self.epd.display(self.epd.getbuffer(image))
         self.epd.lut_DU()
         self.epd.refresh()
 
-    def clear(self):
+    def clear(self) -> None:
         self.epd.Clear()
 
-    def enter_standby(self):
+    def sleep(self) -> None:
         self.epd.sleep()
+
+    def wake_up(self) -> None:
+        self.epd.init()

@@ -72,4 +72,4 @@ if __name__ == "__main__":
     try:
         asset_monitor.start()
     except KeyboardInterrupt:
-        asset_monitor.stop()
+        asset_monitor.stop()black

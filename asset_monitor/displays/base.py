@@ -35,5 +35,9 @@ class Display(ABC):
         pass
 
     @abstractmethod
-    def enter_standby(self) -> None:
+    def sleep(self) -> None:
+        pass
+
+    @abstractmethod
+    def wake_up(self) -> None:
         pass

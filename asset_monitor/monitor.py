@@ -25,6 +25,7 @@ class Monitor:
         screen_split_interval = self.display.height // len(self.assets)
         prev_change = [float("inf")] * len(self.assets)
         logging.info("Monitoring asset...")
+        self.display.init()
         while True:
             logging.debug("Refreshing asset(s)...")
             curr_change = []
@@ -33,7 +34,7 @@ class Monitor:
                 curr_change.append("{:.2f}".format(asset.change))
             if curr_change != prev_change:
                 logging.info("Asset change detected")
-                self.display.init()
+                self.display.wake_up()
                 main_image = Image.new(
                     "1", (self.display.width, self.display.height), 255
                 )
@@ -42,12 +43,12 @@ class Monitor:
                         chart.get_image(), (0, i * (screen_split_interval))
                     )
                 self.display.fast_update(main_image)
-                self.display.enter_standby()
+                self.display.sleep()
             prev_change = curr_change
             time.sleep(self.refresh_delay)
 
     def stop(self):
         logging.info("Clearing and sleeping display...")
         self.display.clear()
-        self.display.enter_standby()
+        self.display.sleep()
         logging.info("Monitor stopped successfully")
