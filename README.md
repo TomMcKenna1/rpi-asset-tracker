@@ -106,6 +106,7 @@ The following configuration options are currently supported:
 ## Examples
 
 ### BTC with candle stick chart
+![](https://github.com/TomMcKenna1/financial-asset-monitor/blob/main/resources/btc_demo.png)
 Display Bitcoin/USD fullscreen with a candle chart:
 
 ```yaml
@@ -126,6 +127,7 @@ screen_safe_interval: 86400 # 24 hours
 ```
 
 ### META, AAPL, AMZN, GOOG with line charts
+![](https://github.com/TomMcKenna1/financial-asset-monitor/blob/main/resources/four_asset_demo.png)
 Display Meta, Apple, Amazon and Google stocks each with their respective line chart:
 
 ```yaml
