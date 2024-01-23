@@ -1,7 +1,7 @@
-<h3 align="center">rpi-asset-tracker</h3>
+<h3 align="center">financial-asset-monitor</h3>
 
   <p align="center">
-    Visually track any financial asset on a raspberry-pi zero W and e-ink display.
+    Visually track any financial asset on a Raspberry-Pi Zero W (2) and a supported display.
     <br />
     <a href="https://github.com/TomMcKenna1/financial-asset-monitor/issues">Report Bug</a>
     ·
