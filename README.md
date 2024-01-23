@@ -120,8 +120,6 @@ assets:
 
 chart:
   candles: true
-  font: "./Roboto.ttf"
-  font_variant: "Bold"
   font_size: 30
 
 refresh_delay: 180
@@ -141,8 +139,6 @@ assets:
   - ticker: "GOOG"
 
 chart:
-  font: "./Roboto.ttf"
-  font_variant: "Bold"
   font_size: 30
 
 refresh_delay: 180
