@@ -17,6 +17,7 @@
     <li><a href="#getting-started">Getting Started</a></li>
     <li><a href="#configuration">Configuration</a></li>
     <li><a href="#examples">Examples</a></li>
+    <li><a href="#adding-an-unsupported-display">Adding an unsupported display</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -149,6 +150,31 @@ refresh_delay: 180
 
 screen_safe_interval: 86400 # 24 hours
 ```
+
+## Adding an unsupported display
+If your display is currently not supported, it is relatively easy to add a display implementation to the asset tracker.
+
+Please follow the steps below:
+1. Navigate to the displays directory within the asset tracker:
+   ```sh
+   cd asset_tracker/displays
+   ```
+2. Create a new python file under whatever name you want:
+   ```sh
+   touch YOUR-NAME-HERE.py
+   ```
+3. Within this python file, import both the base Display and the DisplayFactory classes:
+   ```python
+   from .base import Display
+   from .display_factory import DisplayFactory
+   ```
+4. In the same python file, create a class that inherits from the Display class. You must decorate this class with the DisplayFactory.register method:
+   ```python
+   @DisplayFactory.register("YOUR-DISPLAY-ID")
+   class YOUR-DISPLAY(Display):
+       pass
+   ```
+5. This class must contain all function implementations defined in the base Display class.
 
 <!-- ROADMAP -->
 ## Roadmap
