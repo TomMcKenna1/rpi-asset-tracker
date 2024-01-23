@@ -1,6 +1,7 @@
 import logging
 import time
 from datetime import datetime
+from typing import Union
 
 from PIL import Image
 
@@ -16,14 +17,12 @@ class Monitor:
         assets: list[Asset],
         charts: list[ChartRenderer],
         refresh_delay: int = 180,
-        screen_safe: bool = True,
-        screen_safe_interval: int = 86400,
+        screen_safe_interval: Union[int, None] = None,
     ):
         self.display = display
         self.assets = assets
         self.charts = charts
         self.refresh_delay = refresh_delay
-        self.screen_safe = screen_safe
         self.screen_safe_interval = screen_safe_interval
         self.last_full_refresh = datetime.now()
 
@@ -34,7 +33,7 @@ class Monitor:
         for i, chart in enumerate(self.charts):
             image.paste(chart.get_image(), (0, i * (screen_split_interval)))
         if (
-            self.screen_safe
+            self.screen_safe_interval
             and (datetime.now() - self.last_full_refresh).seconds
             > self.screen_safe_interval
         ):

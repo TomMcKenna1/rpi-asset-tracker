@@ -71,7 +71,7 @@ if __name__ == "__main__":
         assets,
         charts,
         refresh_delay=config.get("refresh_delay", 180),
-        screen_safe_interval=config.get("screen_safe_interval", 86400),
+        screen_safe_interval=config.get("screen_safe_interval"),
     )
     try:
         asset_monitor.start()
