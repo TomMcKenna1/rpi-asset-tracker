@@ -16,3 +16,4 @@ chart:
 
 # Please enter a number in seconds
 refresh_delay: 20
+screen_safe_interval: 86400 # 24 hours

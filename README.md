@@ -106,6 +106,7 @@ The following configuration options are currently supported:
    - **font_variant**: `str` - The font variant (*OPTIONAL*)
    - **font_size**: `int` - The size of the font (*OPTIONAL*)
  * **refresh_delay**: `int` - The number of seconds between refreshing assets (REQUIRED)
+ * **screen_safe_interval**: `int` - The number of seconds between full refreshing the screen. This option is useful when dealing with e-ink displays that require full refreshingevery so often. (OPTIONAL)
 
 ### BTC with candle stick chart
 Display Bitcoin/USD fullscreen with a candle chart:
@@ -123,6 +124,8 @@ chart:
   font_size: 30
 
 refresh_delay: 180
+
+screen_safe_interval: 86400 # 24 hours
 ```
 
 ### META, AAPL, AMZN, GOOG with line charts
@@ -142,6 +145,8 @@ chart:
   font_size: 30
 
 refresh_delay: 180
+
+screen_safe_interval: 86400 # 24 hours
 ```
 
 <!-- ROADMAP -->
