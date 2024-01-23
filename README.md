@@ -73,7 +73,7 @@ In order to use waveshare e-ink displays, you must install the necessary drivers
   ```
 
 ### Running the project
-To run the project, clone the repository and run the `main.py` file. All configuration is handled within the `config.yml` file. Please see <a href="#Configuration">Configuration</a> for configuration examples.
+To run the project, clone the repository and run the `main.py` file. All configuration is handled within the `config.yml` file. Please see <li><a href="#examples">Examples</a></li> for configuration examples.
 
 1. Clone the repository:
   ```sh
