@@ -13,15 +13,10 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>
-    <li>
-      <a href="#configuration">Configuration</a>
-    </li>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#configuration">Configuration</a></li>
+    <li><a href="#examples">Examples</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -107,6 +102,8 @@ The following configuration options are currently supported:
    - **font_size**: `int` - The size of the font (*OPTIONAL*)
  * **refresh_delay**: `int` - The number of seconds between refreshing assets (REQUIRED)
  * **screen_safe_interval**: `int` - The number of seconds between full refreshing the screen. This option is useful when dealing with e-ink displays that require full refreshingevery so often. (OPTIONAL)
+
+## Examples
 
 ### BTC with candle stick chart
 Display Bitcoin/USD fullscreen with a candle chart:
