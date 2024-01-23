@@ -3,9 +3,9 @@
   <p align="center">
     Visually track any financial asset on a raspberry-pi zero W and e-ink display.
     <br />
-    <a href="https://github.com/TomMcKenna1/rpi-asset-tracker/issues">Report Bug</a>
+    <a href="https://github.com/TomMcKenna1/financial-asset-monitor/issues">Report Bug</a>
     ·
-    <a href="https://github.com/TomMcKenna1/rpi-asset-tracker/issues">Request Feature</a>
+    <a href="https://github.com/TomMcKenna1/financial-asset-monitor/issues">Request Feature</a>
   </p>
 </div>
 
@@ -32,7 +32,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![](https://github.com/TomMcKenna1/rpi-asset-tracker/blob/main/resources/demo.png)
+![](https://github.com/TomMcKenna1/financial-asset-monitor/blob/main/resources/demo.png)
 
 Easily monitor any financial asset using a Raspberry-Pi Zero W (2) and an e-ink display. This project supports any financial asset available on Yahoo Finance, and can be configured to display a single asset, or multiple assets at the same time.
 
@@ -82,7 +82,7 @@ To run the project, clone the repository and run the `main.py` file. All configu
 
 1. Clone the repository:
   ```sh
-  git clone https://github.com/TomMcKenna1/rpi-asset-tracker
+  git clone https://github.com/TomMcKenna1/financial-asset-monitor
   ```
 2. Run the `main.py` file:
   ```sh
@@ -149,7 +149,7 @@ refresh_delay: 180
 
 - [ ] Support different time series (currently only supports monthly)
 
-See the [open issues](https://github.com/TomMcKenna1/rpi-asset-tracker/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/TomMcKenna1/financial-asset-monitor/issues) for a full list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -175,4 +175,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Tom McKenna - [Follow me on LinkedIn!](https://www.linkedin.com/in/tom-m-8a70891a8/) - tom2mckenna@gmail.com
 
-Project Link: [https://github.com/TomMcKenna1/rpi-asset-tracker](https://github.com/TomMcKenna1/rpi-asset-tracker)
+Project Link: [https://github.com/TomMcKenna1/financial-asset-monitor](https://github.com/TomMcKenna1/financial-asset-monitor)
