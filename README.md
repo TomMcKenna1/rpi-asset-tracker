@@ -36,7 +36,7 @@
 
 Easily monitor any financial asset using a raspberry-pi zero W and an e-ink display. This project supports any financial asset available on Yahoo Finance, and can be configured to display a single asset, or multiple assets at the same time.
 
-Key features:
+**Key features**:
  - Monitor any single or multiple asset(s) available on Yahoo Finance
  - Set a refresh delay to check for price updates
  - Show a line or candlestick chart
