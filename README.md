@@ -34,7 +34,7 @@
 
 ![](https://github.com/TomMcKenna1/rpi-asset-tracker/blob/main/resources/demo.png)
 
-Easily monitor any financial asset using a raspberry-pi zero W and an e-ink display. This project supports any financial asset available on Yahoo Finance, and can be configured to display a single asset, or multiple assets at the same time.
+Easily monitor any financial asset using a Raspberry-Pi Zero W (2) and an e-ink display. This project supports any financial asset available on Yahoo Finance, and can be configured to display a single asset, or multiple assets at the same time.
 
 **Key features**:
  - Monitor any single or multiple asset(s) available on Yahoo Finance
