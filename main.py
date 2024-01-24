@@ -27,7 +27,7 @@ def get_display(config: any) -> Display:
         logging.root.setLevel(level=logging.DEBUG)
         return DisplayFactory.get("dev")
     else:
-        return DisplayFactory.get(config["display"]["name"])
+        return DisplayFactory.get(config["display"]["id"])
 
 
 def get_assets(config: any) -> list[Asset]:
