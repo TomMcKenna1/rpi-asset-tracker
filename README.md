@@ -80,7 +80,12 @@ To run the project, clone the repository and run the `main.py` file. All configu
   ```sh
   git clone https://github.com/TomMcKenna1/financial-asset-monitor
   ```
-2. Run the `main.py` file:
+2. Install project dependancies:
+   ```sh
+   cd financial-asset-monitor
+   pip3 install -r requirements.txt
+   ```
+3. Run the `main.py` file:
   ```sh
   python3 main.py
   ```
