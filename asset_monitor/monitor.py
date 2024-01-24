@@ -63,5 +63,6 @@ class Monitor:
 
     def stop(self):
         logging.info("Stopping monitor...")
+        self.display.wake_up()
         self.display.clear()
         self.display.sleep()
