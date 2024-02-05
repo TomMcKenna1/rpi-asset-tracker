@@ -1,5 +1,6 @@
 import argparse
 import logging
+import asyncio
 
 import yaml
 
@@ -63,12 +64,14 @@ def get_charts(assets: list[Asset], config: any) -> list[ChartRenderer]:
 
 if __name__ == "__main__":
     logging.basicConfig()
-    logging.root.setLevel(level=logging.INFO)
+    logging.root.setLevel(level=logging.DEBUG)
+    loop = asyncio.get_event_loop()
+    server = Server(loop)
+    loop.run_until_complete(server.start())
     config = get_config()
     display = get_display(config)
     assets = get_assets(config)
     charts = get_charts(assets, config)
-    server = Server()
     asset_monitor = Monitor(
         display,
         assets,
