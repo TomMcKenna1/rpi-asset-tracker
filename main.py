@@ -3,6 +3,7 @@ import logging
 
 import yaml
 
+from market_monitor import Server
 from asset_monitor import Monitor, ChartRenderer, Asset, DisplayFactory
 from asset_monitor.displays import Display
 
@@ -67,6 +68,7 @@ if __name__ == "__main__":
     display = get_display(config)
     assets = get_assets(config)
     charts = get_charts(assets, config)
+    server = Server()
     asset_monitor = Monitor(
         display,
         assets,
