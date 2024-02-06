@@ -41,7 +41,7 @@ class Server:
                     ),
                     "Value": None,
                 },
-                "testerstesttesttesttesttesttesttest": {
+                "cfc0c92f-317d-4bv9-976b-cc11ce77b4ca": {
                     "Properties": (
                         GATTCharacteristicProperties.read
                     ),
