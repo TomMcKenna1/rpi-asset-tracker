@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import json
 
 from typing import Any
 
@@ -12,7 +13,7 @@ from bless import (
 
 
 class Server:
-    def __init__(self, loop):
+    def __init__(self, loop, market_monitor=None):
         # Instantiate the server
         self.gatt = {
             "A07498CA-AD5B-474E-940D-16F1FBE7E8CD": {
@@ -26,15 +27,25 @@ class Server:
                         GATTAttributePermissions.readable
                         | GATTAttributePermissions.writeable
                     ),
-                    "Value": None,
-                }
-            },
-            "5c339364-c7be-4f23-b666-a8ff73a6a86a": {
+                    "Value": json.dumps(
+                        [
+                            {"name": "BTC", "ticker": "BTC-USD"},
+                            {"name": "S&P 500", "ticker": "^GSPC"},
+                        ]
+                    ),
+                },
                 "bfc0c92f-317d-4ba9-976b-cc11ce77b4ca": {
-                    "Properties": GATTCharacteristicProperties.read,
-                    "Permissions": GATTAttributePermissions.readable,
-                    "Value": bytearray(b"Hello world!"),
-                }
+                    "Properties": (
+                        GATTCharacteristicProperties.read
+                        | GATTCharacteristicProperties.write
+                        | GATTCharacteristicProperties.indicate
+                    ),
+                    "Permissions": (
+                        GATTAttributePermissions.readable
+                        | GATTAttributePermissions.writeable
+                    ),
+                    "Value": 20,
+                },
             },
         }
         my_service_name = "Market Monitor"
@@ -54,29 +65,31 @@ class Server:
         characteristic.value = value
         logging.debug(f"Char value set to {characteristic.value}")
 
+    async def stop(self):
+        await self.server.stop()
+        logging.debug("BLE server stopped successfully")
+
     async def start(self):
 
         await self.server.add_gatt(self.gatt)
         await self.server.start()
-        logging.debug(
-            self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B")
-        )
         logging.debug("Advertising")
-        logging.info(
-            "Write '0xF' to the advertised characteristic: "
-            + "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B"
-        )
-        await asyncio.sleep(2)
-        logging.debug("Updating")
-        self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value = (
-            bytearray(b"i")
-        )
-        self.server.update_value(
-            "A07498CA-AD5B-474E-940D-16F1FBE7E8CD",
-            "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B",
-        )
-        logging.debug(
-            self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value
-        )
-        while True:
-            pass
+        # logging.debug(
+        #     self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B")
+        # )
+        # logging.info(
+        #     "Write '0xF' to the advertised characteristic: "
+        #     + "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B"
+        # )
+        # await asyncio.sleep(2)
+        # logging.debug("Updating")
+        # self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value = (
+        #     bytearray(b"i")
+        # )
+        # self.server.update_value(
+        #     "A07498CA-AD5B-474E-940D-16F1FBE7E8CD",
+        #     "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B",
+        # )
+        # logging.debug(
+        #     self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value
+        # )
