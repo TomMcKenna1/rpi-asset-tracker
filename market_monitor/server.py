@@ -27,12 +27,7 @@ class Server:
                         GATTAttributePermissions.readable
                         | GATTAttributePermissions.writeable
                     ),
-                    "Value": json.dumps(
-                        [
-                            {"name": "BTC", "ticker": "BTC-USD"},
-                            {"name": "S&P 500", "ticker": "^GSPC"},
-                        ]
-                    ),
+                    "Value": None,
                 },
                 "bfc0c92f-317d-4ba9-976b-cc11ce77b4ca": {
                     "Properties": (
@@ -44,7 +39,7 @@ class Server:
                         GATTAttributePermissions.readable
                         | GATTAttributePermissions.writeable
                     ),
-                    "Value": 20,
+                    "Value": None,
                 },
             },
         }
@@ -73,23 +68,21 @@ class Server:
 
         await self.server.add_gatt(self.gatt)
         await self.server.start()
+        self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value = (
+            json.dumps(
+                [
+                    {"name": "BTC", "ticker": "BTC-USD"},
+                    {"name": "S&P 500", "ticker": "^GSPC"},
+                ]
+            ).encode("utf-8")
+        )
+        self.server.get_characteristic("bfc0c92f-317d-4ba9-976b-cc11ce77b4ca").value = 20
+        self.server.update_value(
+            "A07498CA-AD5B-474E-940D-16F1FBE7E8CD",
+            "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B",
+        )
+        self.server.update_value(
+            "A07498CA-AD5B-474E-940D-16F1FBE7E8CD",
+            "bfc0c92f-317d-4ba9-976b-cc11ce77b4ca",
+        )
         logging.debug("Advertising")
-        # logging.debug(
-        #     self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B")
-        # )
-        # logging.info(
-        #     "Write '0xF' to the advertised characteristic: "
-        #     + "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B"
-        # )
-        # await asyncio.sleep(2)
-        # logging.debug("Updating")
-        # self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value = (
-        #     bytearray(b"i")
-        # )
-        # self.server.update_value(
-        #     "A07498CA-AD5B-474E-940D-16F1FBE7E8CD",
-        #     "51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B",
-        # )
-        # logging.debug(
-        #     self.server.get_characteristic("51FF12BB-3ED8-46E5-B4F9-D64E2FEC021B").value
-        # )

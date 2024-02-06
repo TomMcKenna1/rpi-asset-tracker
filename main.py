@@ -83,4 +83,4 @@ if __name__ == "__main__":
         asset_monitor.start()
     except KeyboardInterrupt:
         asset_monitor.stop()
-        server.stop()
+        loop.run_until_complete(server.stop())
