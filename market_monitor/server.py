@@ -41,6 +41,15 @@ class Server:
                     ),
                     "Value": None,
                 },
+                "testerstesttesttesttesttesttesttest": {
+                    "Properties": (
+                        GATTCharacteristicProperties.read
+                    ),
+                    "Permissions": (
+                        GATTAttributePermissions.readable
+                    ),
+                    "Value": bytearray(b"hello world"),
+                },
             },
         }
         my_service_name = "Market Monitor"
