@@ -3,12 +3,13 @@ display:
   flipped: false
 
 assets:
-  - ticker: "META"
-  - ticker: "AAPL"
-  - ticker: "AMZN"
-  - ticker: "GOOG"
+  - ticker: '^GSPC'
+    name: 'S&P 500'
+  - ticker: "BTC-USD"
+    name: 'BTC'
 
 chart:
+  candles: True
   font: "./Roboto.ttf"
   font_variant: "Bold"
   font_size: 30
