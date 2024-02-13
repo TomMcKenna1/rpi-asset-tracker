@@ -42,7 +42,7 @@ class Monitor:
         for i, chart in enumerate(self.config.charts):
             image.paste(chart.get_image(), (0, i * (screen_split_interval)))
         if self.config.flipped:
-            image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)
+            image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)
         if (
             self.config.screen_safe_interval
             and (datetime.now() - self.last_full_refresh).seconds
