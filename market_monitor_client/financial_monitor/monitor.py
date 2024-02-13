@@ -18,7 +18,20 @@ class Monitor:
         self.last_full_refresh = datetime.now()
         self.running = False
         self.updating = False
-        self.pause = False
+        self._pause = False
+        self._pause_q = []
+    
+    @property
+    def pause(self):
+        if self._pause_q:
+            return self._pause_q.pop()
+        return self._pause
+    
+    @pause.setter
+    def pause(self, value):
+        if self._pause != value:
+            self._pause = value
+            self._pause_q.append(value)
 
     def _update_display(self):
         screen_split_interval = self.config.display.height // len(self.config.assets)
