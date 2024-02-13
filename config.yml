@@ -3,15 +3,12 @@ display:
   flipped: false
 
 assets:
-  - ticker: "META"
-  - ticker: "AAPL"
-  - ticker: "AMZN"
-  - ticker: "GOOG"
+  - ticker: "^GSPC"
+    name: "S&P 500"
 
-chart:
-  font: "./Roboto.ttf"
-  font_variant: "Bold"
-  font_size: 30
+font: "./Roboto.ttf"
+font_variant: "Bold"
+font_size: 30
 
 # Please enter a number in seconds
 refresh_delay: 20

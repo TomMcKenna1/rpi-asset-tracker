@@ -16,7 +16,6 @@ class ChartRenderer:
         height: int,
         asset: Asset,
         candles: bool = False,
-        flipped: bool = False,
         font: Union[str, None] = None,
         font_variant: Union[str, None] = None,
         font_size: Union[int, None] = None,
@@ -25,7 +24,6 @@ class ChartRenderer:
         self.height = height
         self.asset = asset
         self.candles = candles
-        self.flipped = flipped
         if font:
             self.font = ImageFont.truetype(font, size=font_size)
         else:
@@ -184,9 +182,4 @@ class ChartRenderer:
         draw = ImageDraw.Draw(image)
         self._draw_asset_metadata(draw)
         self._draw_history(draw, candles=self.candles)
-        if self.flipped:
-            return image.transpose(Image.FLIP_TOP_BOTTOM).transpose(
-                Image.FLIP_LEFT_RIGHT
-            )
-        else:
-            return image
+        return image
