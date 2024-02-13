@@ -1,6 +1,6 @@
 display:
   id: "waveshare_3in52"
-  flipped: false
+  flipped: true
 
 assets:
   - ticker: "^GSPC"

@@ -9,7 +9,7 @@ from bless import (
 )
 
 class GATTServer:
-    def __init__(self, name: str):
+    def __init__(self, name: str, loop):
         self.name = name
         self.gatt = {
             "A07498CA-AD5B-474E-940D-16F1FBE7E8CD": {
@@ -37,7 +37,7 @@ class GATTServer:
                 },
             },
         }
-        self._server = BlessServer(self.name)
+        self._server = BlessServer(self.name, loop=loop)
         self._server.read_request_func = self._read_request
         self._server.write_request_func = self._write_request
         self._on_write = None

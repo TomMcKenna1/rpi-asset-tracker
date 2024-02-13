@@ -6,10 +6,10 @@ from .financial_monitor import Config, Monitor
 
 
 class Client:
-    def __init__(self, **kwargs):
+    def __init__(self, loop, **kwargs):
         self._monitor_config = Config.from_yaml("config.yml", **kwargs)
         self._monitor = Monitor(self._monitor_config)
-        self._gatt_server = GATTServer("Market Monitor")
+        self._gatt_server = GATTServer("Market Monitor", loop)
         self._gatt_server.on_write = self.change_monitor_config
 
     def change_monitor_config(self, value: str):
