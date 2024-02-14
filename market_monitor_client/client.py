@@ -14,7 +14,9 @@ class Client:
         self._gatt_server.on_write = self.change_monitor_config
 
     def change_monitor_config(self, value: str):
+        print(value)
         decoded_value = value.decode('utf-8')
+        print(decoded_value)
         self._monitor.pause = True
         changes = json.loads(decoded_value)
         for k, v in changes.items():
