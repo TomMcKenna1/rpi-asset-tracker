@@ -1,5 +1,4 @@
 import logging
-import asyncio
 
 import argparse
 
@@ -15,4 +14,4 @@ if __name__ == "__main__":
     try:
         client.start()
     except KeyboardInterrupt:
-        asyncio.run(client.stop())
+        client.stop()

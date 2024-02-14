@@ -1,6 +1,7 @@
 import logging
 import asyncio
 from datetime import datetime
+from collections import deque
 
 from PIL import Image
 
@@ -19,18 +20,22 @@ class Monitor:
         self.running = False
         self.updating = False
         self._pause = False
-        self._pause_q = []
-    
+        self._pause_q = deque()
+
     @property
     def pause(self):
         if self._pause_q:
-            return self._pause_q.pop()
+            self._pause = self._pause_q[0]
+            return self._pause_q.popleft()
         return self._pause
-    
+
     @pause.setter
     def pause(self, value):
-        if self._pause != value:
-            self._pause = value
+        if self._pause_q:
+            to_check = self._pause_q[-1]
+        else:
+            to_check = self._pause
+        if to_check != value:
             self._pause_q.append(value)
 
     def _update_display(self):
@@ -42,7 +47,9 @@ class Monitor:
         for i, chart in enumerate(self.config.charts):
             image.paste(chart.get_image(), (0, i * (screen_split_interval)))
         if self.config.flipped:
-            image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.FLIP_LEFT_RIGHT)
+            image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(
+                Image.FLIP_LEFT_RIGHT
+            )
         if (
             self.config.screen_safe_interval
             and (datetime.now() - self.last_full_refresh).seconds

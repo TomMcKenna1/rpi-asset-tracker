@@ -7,8 +7,8 @@ from .financial_monitor import Config, Monitor
 
 class Client:
     def __init__(self, **kwargs):
-        self._monitor_config = Config.from_yaml("config.yml", **kwargs)
         self.loop = asyncio.get_event_loop()
+        self._monitor_config = Config.from_yaml("config.yml", **kwargs)
         self._monitor = Monitor(self._monitor_config)
         self._gatt_server = GATTServer("Market Monitor", self.loop)
         self._gatt_server.on_write = self.change_monitor_config
@@ -25,6 +25,6 @@ class Client:
     def start(self):
         self.loop.run_until_complete(asyncio.gather(self._monitor.start(), self._gatt_server.start()))
     
-    async def stop(self):
-        await asyncio.gather(self._monitor.stop(), self._gatt_server.stop())
+    def stop(self):
+        self.loop.run_until_complete(asyncio.gather(self._monitor.stop(), self._gatt_server.stop()))
             
