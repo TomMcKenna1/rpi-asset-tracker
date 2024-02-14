@@ -16,4 +16,5 @@ sudo systemctl unmask bluetooth.service
 sudo systemctl restart bluetooth
 # Reqired for some installations of dbus-next
 export SKIP_CYTHON=false
-pip3 install bless yfinance pyyaml dbus-next
+git clone https://github.com/waveshareteam/e-Paper ~/e-Paper
+pip3 install bless yfinance pyyaml dbus-next ~/e-Paper/RaspberryPi_JetsonNano/python/
