@@ -14,3 +14,6 @@ sudo sed -i '/ExecStart=/ s/$/ --experimental/' /lib/systemd/system/bluetooth.se
 sudo systemctl daemon-reload
 sudo systemctl unmask bluetooth.service
 sudo systemctl restart bluetooth
+# Reqired for some installations of dbus-fast
+export SKIP_CYTHON=false
+pip3 install bless yfinance pyyaml
