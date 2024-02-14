@@ -16,6 +16,7 @@ class ChartRenderer:
         height: int,
         asset: Asset,
         candles: bool = False,
+        line_width: int = 0,
         font: Union[str, None] = None,
         font_variant: Union[str, None] = None,
         font_size: Union[int, None] = None,
@@ -24,6 +25,7 @@ class ChartRenderer:
         self.height = height
         self.asset = asset
         self.candles = candles
+        self.line_width = line_width
         if font:
             self.font = ImageFont.truetype(font, size=font_size)
         else:
@@ -174,7 +176,8 @@ class ChartRenderer:
                         self.meta_start_height - ((y - asset_low) * self.pixel_factor),
                     )
                     for x, y in enumerate(self.asset.history["Close"])
-                ]
+                ],
+                width=self.line_width
             )
 
     def get_image(self) -> Image.Image:

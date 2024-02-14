@@ -10,7 +10,7 @@ from .chart_renderer import ChartRenderer
 
 DEFAULT_REFRESH_DELAY = 180  # 3 minutes
 DEFAULT_SCREEN_SAFE_INTERVAL = 86400  # 24 hours
-
+DEFAULT_LINE_WIDTH = 2
 
 class Config:
     def __init__(
@@ -19,6 +19,7 @@ class Config:
         display_type,
         flipped=False,
         candles=False,
+        line_width=DEFAULT_LINE_WIDTH,
         font=None,
         font_variant=None,
         font_size=None,
@@ -30,6 +31,7 @@ class Config:
         self._charts = []
         self._flipped = flipped
         self._candles = candles
+        self._line_width = line_width
         self._font = font
         self._font_variant = font_variant
         self._font_size = font_size
@@ -48,6 +50,7 @@ class Config:
             config["display"]["id"],
             config["display"].get("flipped"),
             config["display"].get("candles"),
+            config.get("line_width", DEFAULT_LINE_WIDTH),
             config.get("font"),
             config.get("font_variant"),
             config.get("font_size"),
@@ -78,6 +81,7 @@ class Config:
                     screen_split_interval,
                     asset_instance,
                     candles=self._candles,
+                    line_width=self._line_width,
                     font=self._font,
                     font_variant=self._font_variant,
                     font_size=self._font_size,
@@ -112,6 +116,17 @@ class Config:
         else:
             raise TypeError("Config item 'candles' must be of type bool")
 
+    @property
+    def line_width(self) -> int:
+        return self._line_width
+
+    @line_width.setter
+    def line_width(self, value: int):
+        if isinstance(value, int):
+            self._line_width = value
+        else:
+            raise TypeError("Config item 'line_width' must be of type int")
+        
     @property
     def font(self) -> str:
         return self._font
