@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 
 from .gatt_server import GATTServer
 from .financial_monitor import Config, Monitor
@@ -14,9 +15,9 @@ class Client:
         self._gatt_server.on_write = self.change_monitor_config
 
     def change_monitor_config(self, value: str):
-        print(value)
+        logging.debug(value)
         decoded_value = value.decode('utf-8')
-        print(decoded_value)
+        logging.debug(decoded_value)
         self._monitor.pause = True
         changes = json.loads(decoded_value)
         for k, v in changes.items():
