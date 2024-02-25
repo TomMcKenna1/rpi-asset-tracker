@@ -15,6 +15,7 @@ DEFAULT_LINE_WIDTH = 2
 class Config:
     def __init__(
         self,
+        uuid,
         asset_list,
         display_type,
         flipped=False,
@@ -26,6 +27,7 @@ class Config:
         refresh_delay=DEFAULT_REFRESH_DELAY,
         screen_safe_interval=DEFAULT_SCREEN_SAFE_INTERVAL,
     ):
+        self._uuid = uuid
         self._display = DisplayFactory.get(display_type)
         self._assets = []
         self._charts = []
@@ -46,6 +48,7 @@ class Config:
         if kwargs.get("dev"):
             config["display"]["id"] = "dev"
         return cls(
+            config["uuid"],
             config["assets"],
             config["display"]["id"],
             config["display"].get("flipped"),
@@ -61,6 +64,10 @@ class Config:
     @property
     def display(self) -> Display:
         return self._display
+    
+    @property
+    def uuid(self) -> str:
+        return self._uuid
 
     @property
     def assets(self) -> list[Asset]:

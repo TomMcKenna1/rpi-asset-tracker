@@ -11,7 +11,7 @@ class Client:
         self.loop = asyncio.get_event_loop()
         self._monitor_config = Config.from_yaml("config.yml", **kwargs)
         self._monitor = Monitor(self._monitor_config)
-        self._gatt_server = GATTServer("Market Monitor", self.loop)
+        self._gatt_server = GATTServer(f"marketmonitor:{self._monitor_config.uuid}", self.loop)
         self._gatt_server.on_write = self.change_monitor_config
 
     def change_monitor_config(self, value: str):
