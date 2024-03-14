@@ -43,6 +43,18 @@ class ChartRenderer:
             self.asset.history["High"].max() - self.asset.history["Low"].min()
         )
 
+    def draw_text_with_outline(self, draw, text, position, font, outline_thickness):
+        for i in range(1, outline_thickness + 1):
+            outline_position = (position[0] - i, position[1])
+            draw.text(outline_position, text, font=font, fill=0)
+            outline_position = (position[0] + i, position[1])
+            draw.text(outline_position, text, font=font, fill=0)
+            outline_position = (position[0], position[1] - i)
+            draw.text(outline_position, text, font=font, fill=0)
+            outline_position = (position[0], position[1] + i)
+            draw.text(outline_position, text, font=font, fill=0)
+        draw.text(position, text, font=font, fill=1)
+
     def _draw_metadata_divider(self, draw: ImageDraw.ImageDraw) -> None:
         metadata_divider = [
             (0, self.meta_start_height - self.bar_thickness),
@@ -81,22 +93,54 @@ class ChartRenderer:
         )
 
     def _draw_metadata_change(self, draw: ImageDraw.ImageDraw) -> None:
-        asset_change = "{:.2f}%".format(self.asset.change)
-        change_text_length = self.font.getlength(asset_change)
+        asset_change_num = str(round(self.asset.change, 2))
+        suffix = "%"
+        is_positive = self.asset.change >= 0
+        change_text_length = self.font.getlength(asset_change_num)
+        suffix_text_length = self.font.getlength(suffix)
         change_divider = [
             (
-                self.width - change_text_length - 20,
+                self.width - change_text_length - suffix_text_length - 20,
                 self.meta_start_height + self.meta_font_height // 5,
             ),
             (
-                self.width - change_text_length - 20 + self.bar_thickness,
+                self.width
+                - change_text_length
+                - suffix_text_length
+                - 20
+                + self.bar_thickness,
                 self.height - self.meta_font_height // 5,
             ),
         ]
-
+        if is_positive:
+            print('positive')
+            self.draw_text_with_outline(
+                draw,
+                asset_change_num,
+                (
+                    self.width - change_text_length - suffix_text_length - 10,
+                    self.meta_start_height,
+                ),
+                self.font,
+                2,
+            )
+        else:
+            print('negative')
+            draw.text(
+                (
+                    self.width - change_text_length - suffix_text_length - 10,
+                    self.meta_start_height,
+                ),
+                asset_change_num,
+                font=self.font,
+                fill=0,
+            )
         draw.text(
-            (self.width - change_text_length - 10, self.meta_start_height),
-            asset_change,
+            (
+                self.width - suffix_text_length - 10,
+                self.meta_start_height,
+            ),
+            suffix,
             font=self.font,
             fill=0,
         )
@@ -177,7 +221,7 @@ class ChartRenderer:
                     )
                     for x, y in enumerate(self.asset.history["Close"])
                 ],
-                width=self.line_width
+                width=self.line_width,
             )
 
     def get_image(self) -> Image.Image:
