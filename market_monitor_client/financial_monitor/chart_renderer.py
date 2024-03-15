@@ -93,7 +93,7 @@ class ChartRenderer:
         )
 
     def _draw_metadata_change(self, draw: ImageDraw.ImageDraw) -> None:
-        asset_change_num = str(round(self.asset.change, 2))
+        asset_change_num = "{:.2f}".format(self.asset.change)
         suffix = "%"
         is_positive = self.asset.change >= 0
         change_text_length = self.font.getlength(asset_change_num)
