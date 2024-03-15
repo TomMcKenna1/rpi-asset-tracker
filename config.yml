@@ -2,10 +2,10 @@ uuid: "fdf3710ef2564e0bb2af0c374490644a"
 display:
   id: "waveshare_3in52"
   flipped: true
+  candles: true
 
 assets:
-  - ticker: "^GSPC"
-    name: "S&P 500"
+  - ticker: "NVDA"
 
 font: "./Roboto.ttf"
 font_variant: "Bold"
