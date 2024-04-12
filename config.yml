@@ -4,10 +4,7 @@ display:
   flipped: true
 
 assets:
-  - ticker: "NVDA"
-  - ticker: "GOOG"
-  - ticker: "MSFT"
-  - ticker: "SNOW"
+  - ticker: "^GSPCawd"
 
 font: "./Roboto.ttf"
 font_variant: "Bold"

@@ -224,9 +224,20 @@ class ChartRenderer:
                 width=self.line_width,
             )
 
+    def _draw_message(self, draw: ImageDraw.ImageDraw, message: str) -> None:
+        draw.text(
+            (0, 0),
+            message,
+            font=self.font,
+            fill=0,
+        )
+
     def get_image(self) -> Image.Image:
         image = Image.new("1", (self.width, self.height), 255)
         draw = ImageDraw.Draw(image)
-        self._draw_asset_metadata(draw)
-        self._draw_history(draw, candles=self.candles)
+        if self.asset.error_message:
+            self._draw_message(draw)
+        else:
+            self._draw_asset_metadata(draw)
+            self._draw_history(draw, candles=self.candles)
         return image
